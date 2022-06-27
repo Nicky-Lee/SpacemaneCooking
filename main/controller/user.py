@@ -40,7 +40,7 @@ user_ns = UserDto.user_ns
 
 @user_ns.route("/userInfo")
 class userInfo(Resource):
-    @user_ns.expect(UserDto.user_model)
+    # @user_ns.expect(UserDto.user_model)
     @user_ns.response(200, "success", UserDto.user_model)
     def get(self):
         # if "address" in  request.args().keys():
@@ -55,7 +55,7 @@ class userInfo(Resource):
 class UserLogin(Resource):
     @user_ns.expect(UserDto.user_login_data_model_expect)
     @user_ns.response(200, "success", UserDto.user_model)
-    def get(self):
+    def post(self):
 
         try:
             return process_login_v1(json.loads(request.data))
@@ -79,7 +79,7 @@ class UserSignup(Resource):
 class Forgetpassword(Resource):
     @user_ns.expect(UserDto.user_Forgetpassword_data_model_expect)
     @user_ns.response(200, "success", UserDto.user_Forgetpassword_model_response)
-    @token_required
+    # @token_required
     def get(self):
         try:
             print(json.loads(request.data))

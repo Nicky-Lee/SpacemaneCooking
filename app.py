@@ -18,6 +18,10 @@ manager = Manager(app)
 #     pass
 
 @manager.command
+def run():
+    app.run()
+
+@manager.command
 def create_all():
     db.create_all()
 
@@ -40,6 +44,6 @@ def db_init():
 if __name__ == '__main__':
     db.drop_all()
     db.create_all()
-    app.run(port=5000)
-
+    # manager.run()
+    app.run()
 

@@ -33,7 +33,7 @@ class UserDto():
 
                                     })
     user_Forgetpassword_data_model_expect= user_ns.model("user_Forgetpassword_data_model_expect",
-                                {
+                                {   "username":fields.String,
                                     "email":fields.String,
                                 })
     user_UserSignup_model_response= user_ns.model("user_UserSignup_data_model_expect",

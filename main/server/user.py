@@ -108,12 +108,13 @@ def process_signup_v1(user_info):
 
 # get
 def process_forgetpassword_v1(request):
-    token = request.headers.get("token")
-    user = TOKEN.validate_token(token)
+    # token = request.headers.get("token")
+    # user = TOKEN.validate_token(token)
     user_info = json.loads(request.data)
-    response_data = {"username":None, "message": 'Information error'}
+    response_data = {"username":user_info['username'], "message": 'Information error'}
     status_code = 200
-    response_data['username'] = user.username
+
+    user = User.query.filter(User.username == user_info['username']).first()
     if user is None:
         response_data['message'] = f'username not exist!'
         status_code = 400
