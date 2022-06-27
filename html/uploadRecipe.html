@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<center><big>upload recipe</big></center>
+		<hr>
+		<center>
+		name:<input class="name" /><br>
+		description:<input class="description"/><br>
+		category<input class="category"/><br>
+		calorie<input class="calorie"/><br>
+		<button onclick="uploadRecipe()">upload</button>
+		</center>
+	</body>
+</html>
+<script language="javascript" type="text/javascript">
+function getToken(){
+	return document.cookie.substr(6);
+}
+function uploadRecipe(){
+	name=document.getElementsByClassName("name")[0].value;
+	description=document.getElementsByClassName("description")[0].value
+	category=document.getElementsByClassName("category")[0].value
+	calorie=document.getElementsByClassName("calorie")[0].value
+	xmlhttp=new XMLHttpRequest();
+	xmlhttp.open("POST","http://127.0.0.1:5000/Recipe/uploadRecipe",false);
+	xmlhttp.setRequestHeader("Content-type","text/plain");
+	xmlhttp.setRequestHeader ('Access-Control-Allow-Origin', '*');
+	xmlhttp.setRequestHeader ('token', getToken());
+	xmlhttp.send(JSON.stringify({
+    "R_name":name,
+    "R_description":description,
+    "R_category":category,
+    "R_calorie":parseInt(calorie),
+    "R_img_url":"undefined"
+}));
+	result=JSON.parse(xmlhttp.responseText);
+	console.log(result);
+	alert(result.message);
+	window.location.href="mainPage.html";
+}
+</script>
