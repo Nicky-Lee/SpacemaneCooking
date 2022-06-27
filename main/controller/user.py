@@ -79,8 +79,8 @@ class UserSignup(Resource):
 class Forgetpassword(Resource):
     @user_ns.expect(UserDto.user_Forgetpassword_data_model_expect)
     @user_ns.response(200, "success", UserDto.user_Forgetpassword_model_response)
-    @token_required
-    def get(self):
+    # @token_required
+    def post(self):
         try:
             print(json.loads(request.data))
             return process_forgetpassword_v1(request)
