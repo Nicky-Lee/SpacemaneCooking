@@ -47,7 +47,7 @@ if __name__ == '__main__':
     db.create_all()
     IGD_category_list = [IGD_category('egg'),
                          IGD_category("milk"),
-                         IGD_category("meet")]
+                         IGD_category("meat")]
     db.session.add_all(IGD_category_list)
     db.session.commit()
     # manager.run()

@@ -11,11 +11,11 @@ from .. import db
 #     db.Column('igd_category_id', db.Integer, db.ForeignKey('IGD_category.id')),
 #     db.Column('igd_id', db.Integer, db.ForeignKey('Ingredient.id'))
 # )
-#
-# association_table = db.Table(
+# #
+# Recipe_table = db.Table(
 #     "association",
-#     db.Column("ingredient_id", db.ForeignKey("Ingredient.id"), primary_key=True),
-#     db.Column("recipe_id", db.ForeignKey("Recipe.id"), primary_key=True),
+#     db.Column("Ingredient_id", db.Integer, db.ForeignKey("Ingredient.id"),
+#     db.Column("Recipe_id", db.Integer, db.ForeignKey("Recipe.id")))
 # )
 
 
@@ -28,7 +28,6 @@ class Recipe(db.Model):
     R_category = db.Column(db.String(120), nullable=True)
     R_calorie = db.Column(db.Integer, nullable=True)
     image_id = db.Column(db.Integer)
-
     # igd_id = db.Column(db.Integer, db.ForeignKey('ingredient.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -116,6 +115,7 @@ class Ingredient(db.Model):
     igd_opponent = db.Column(db.String(80))
     igd_calorie = db.Column(db.Integer, nullable=True)
     image_id = db.Column(db.Integer)
+    # Recipe = db.relationship('Recipe', secondary=Recipe_table)
 
     # student_id=db.Column(db.Integer,db.ForeignKey('student.id'))
     def __init__(self, igd_name, igd_category=None, igd_opponent=None, igb_description=None, igd_calorie=0,

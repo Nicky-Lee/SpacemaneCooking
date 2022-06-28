@@ -98,3 +98,14 @@ class ChangPassword(Resource):
             return process_changpassword_v1(request)
         except:
             return 'error request'
+
+# @user_ns.route("/logot")
+# class Logout(Resource):
+#     @user_ns.expect(UserDto.user_ChangPassword_data_model_expect)
+#     # @user_ns.response(200, "success", UserDto.user_ChangPassword_model_response)
+#     @token_required
+#     def post(self):
+#         # try:
+#             return process_logout_v1(request)
+#         # except:
+#         #     return 'error request'

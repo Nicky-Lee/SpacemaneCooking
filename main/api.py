@@ -5,6 +5,7 @@ from .controller.user import user_ns
 from .controller.recipe import Recipe_ns
 # from .util.DTO import RecipeDto
 # from .util.DTO import UserDto
+from .controller.search import search_ns
 blueprint = Blueprint("api", __name__)
 """
 1 data
@@ -44,3 +45,4 @@ api = Api(
 # user_ns = UserDto.user_ns
 api.add_namespace(user_ns, "/User")
 api.add_namespace( Recipe_ns, "/Recipe")
+api.add_namespace( search_ns, "/Search")

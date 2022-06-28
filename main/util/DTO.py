@@ -90,6 +90,13 @@ class RecipeDto():
                                        "user_id": fields.Integer,
                                        "id": fields.Integer
                                    })
+    search_list_Recipe_model = Recipe_ns.model("search_list_Recipe_model",
+                                   {
+                                       "R_name": fields.String,
+                                       "R_category": fields.String,
+                                       "R_calorie": fields.String,
+                                       "R_img_url": fields.String,
+                                   })
     Ingredient_model = Recipe_ns.model("Ingredient_model",
                                        {
                                            "igd_name": fields.String,
@@ -116,3 +123,32 @@ class RecipeDto():
                                             "Recipes": fields.List(fields.Nested(Recipe_model))
 
                                         })
+
+
+class SearchDto():
+    search_ns = Namespace("search function", description="select igd,recipe")
+
+    search_igd_model = search_ns.model("search_igd_model",
+                                     {
+                                         "igd_name": fields.String
+                                     })
+
+
+
+    search_igd_list_model = search_ns.model("search_igd_list_model",
+                                            {
+                                                "number":fields.Integer,
+                                                "igd_list":fields.List(fields.Nested(search_igd_model))
+                                            })
+    search_recipe_model = search_ns.model("search_recipe_model",
+                                     {
+                                         "igd_name": fields.String,
+                                         "R_category":fields.String
+                                     })
+
+    search_recipe_list_model_response = search_ns.model("search_recipe_list_model_response",
+                                                        {
+                                                            "recipe_list":fields.List(fields.Nested(RecipeDto.search_list_Recipe_model))
+                                                        })
+
+

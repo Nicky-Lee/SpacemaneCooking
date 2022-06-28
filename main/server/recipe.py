@@ -25,7 +25,7 @@ def process_UploadRecipe(request):
              "R_description": R_info['R_description'],
              "R_category": R_info['R_category'],
              "R_calorie": 0,
-             "R_img_url": None,
+             "image_id": None,
              "R_igd_list": R_info['R_igd_list'],
              "message": "fail to upload！"}
     R_igd_list = R_info["R_igd_list"].split(',')
@@ -96,15 +96,12 @@ def process_upload_igd(request):
 
 
         db.session.commit()
-        test = IGD_category.query.filter(IGD_category.igd_category_name=="egg").first()
-        for i in test.Ingredient:
-            print(type(i))
-            print(i.igd_name)
+        # test = IGD_category.query.filter(IGD_category.igd_category_name=="egg").first()
+        # for i in test.Ingredient:
+        #     print(type(i))
+        #     print(i.igd_name)
         # test2 = Ingredient.query.filter(test).all()
         # print(test2)
-
-
-
         response_data['message'] = f"{igd_info['igd_name']} upload successfully!!"
     else:
         response_data['message'] = f"{igd_info['igd_name']} already exist!!"
