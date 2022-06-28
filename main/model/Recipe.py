@@ -1,5 +1,6 @@
 from .. import db
 
+
 # recipe_ingredient = db.Table('recipe_ingredient',
 #                              db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id'), primary_key=True),
 #                              db.Column('igd_id', db.Integer, db.ForeignKey('ingredient.id'), primary_key=True)
@@ -37,74 +38,93 @@ class Recipe(db.Model):
         self.R_category = R_category
         self.R_calorie = R_calorie
         self.user_id = user_id
-        self.R_img_url=R_img_url
+        self.R_img_url = R_img_url
 
     def __repr__(self):
         return '<Recipe %r>' % self.R_name
 
+
+# class IGD_category(db.Model):
+#     __tablename__ = 'igd_category'
+#
+#     id = db.Column(db.Integer, primary_key=True)
+#     igd_category = db.Column(db.String(30), unique=True, nullable=False)
+#     igd_id = db.Column(db.Integer,db.ForeignKey('ingredient.id'))
+#
+#     # igd=db.relationship('Ingredient',secondary=ingredient_tag)
+#
+#     # igd_id = db.relationship("Ingredient", secondary=ingredient_tag, backref="IGD_category")
+#     # recipe = db.relationship("recipe", backref="ingredient")
+#     # recipe = db.Column(db.Integer, db.ForeignKey('recipe.id'))
+#     # recipe = db.relationship('recipe', secondary=recipe_ingredient,backref='ingredient')
+#
+#     def __init__(self, igd_category):
+#         self.igd_category = igd_category
+
+
+# class Ingredient(db.Model):
+#     __tablename__ = 'ingredient'
+#
+#     id = db.Column(db.Integer, primary_key=True)
+#     igd_name = db.Column(db.String(80), unique=True, nullable=False)
+#     igd_category = db.Column(db.String(120), nullable=True)
+#     igd_opponent = db.Column(db.String(80))
+#     igd_calorie = db.Column(db.Integer, nullable=True)
+#     image_id = db.Column(db.Integer)
+#     # recipe = db.Column(db.Integer,db.ForeignKey('Recipe.id'))
+#
+#
+#     # recipe = db.relationship("Recipe", secondary=association_table, backref="Ingredient")
+#     # recipe = db.relationship("recipe", backref="ingredient")
+#     # recipe = db.Column(db.Integer, db.ForeignKey('recipe.id'))
+#     # recipe = db.relationship('recipe', secondary=recipe_ingredient,backref='ingredient')
+#
+#     def __init__(self, igd_name, igd_category=None,igd_opponent=None, igb_description=None, igd_calorie=0, image_id=None):
+#         self.igd_name = igd_name
+#         self.igd_category=igd_category
+#         self.igd_opponent = igd_opponent
+#         self.igb_description = igb_description
+#         self.igd_calorie = igd_calorie
+#         self.image_id =image_id
+#
+#     def __repr__(self):
+#         return '<ingredient %r>' % self.igd_name
+
+#
+tags = db.Table('tags'
+                , db.Column('igd_category_id', db.Integer, db.ForeignKey('igd_category.id'))
+                , db.Column('ingredient_id', db.Integer, db.ForeignKey('ingredient.id')))
+
+
 class IGD_category(db.Model):
     __tablename__ = 'igd_category'
-
     id = db.Column(db.Integer, primary_key=True)
-    igd_category = db.Column(db.String(30), unique=True, nullable=False)
-    igd_id = db.Column(db.Integer,db.ForeignKey('ingredient.id'))
+    igd_category_name = db.Column(db.String(30), unique=True, nullable=False)
+    Ingredient = db.relationship('Ingredient', secondary=tags)
 
-    # igd=db.relationship('Ingredient',secondary=ingredient_tag)
+    def __init__(self, igd_category_name):
+        self.igd_category_name = igd_category_name
 
-    # igd_id = db.relationship("Ingredient", secondary=ingredient_tag, backref="IGD_category")
-    # recipe = db.relationship("recipe", backref="ingredient")
-    # recipe = db.Column(db.Integer, db.ForeignKey('recipe.id'))
-    # recipe = db.relationship('recipe', secondary=recipe_ingredient,backref='ingredient')
 
-    def __init__(self, igd_category):
-        self.igd_category = igd_category
 
 
 class Ingredient(db.Model):
-    __tablename__ = 'ingredient'
-
+    ___tablename__ = 'ingredient'
     id = db.Column(db.Integer, primary_key=True)
     igd_name = db.Column(db.String(80), unique=True, nullable=False)
     igd_category = db.Column(db.String(120), nullable=True)
     igd_opponent = db.Column(db.String(80))
     igd_calorie = db.Column(db.Integer, nullable=True)
     image_id = db.Column(db.Integer)
-    # recipe = db.Column(db.Integer,db.ForeignKey('Recipe.id'))
 
-
-    # recipe = db.relationship("Recipe", secondary=association_table, backref="Ingredient")
-    # recipe = db.relationship("recipe", backref="ingredient")
-    # recipe = db.Column(db.Integer, db.ForeignKey('recipe.id'))
-    # recipe = db.relationship('recipe', secondary=recipe_ingredient,backref='ingredient')
-
-    def __init__(self, igd_name, igd_category=None,igd_opponent=None, igb_description=None, igd_calorie=0, image_id=None):
+    # student_id=db.Column(db.Integer,db.ForeignKey('student.id'))
+    def __init__(self, igd_name, igd_category=None, igd_opponent=None, igb_description=None, igd_calorie=0,
+                 image_id=None):
         self.igd_name = igd_name
-        self.igd_category=igd_category
+        self.igd_category = igd_category
         self.igd_opponent = igd_opponent
         self.igb_description = igb_description
         self.igd_calorie = igd_calorie
-        self.image_id =image_id
+        self.image_id = image_id
 
-    def __repr__(self):
-        return '<ingredient %r>' % self.igd_name
 
-#
-tags=db.Table('tags',db.Column('student_id',db.Integer,db.ForeignKey('student.id')),db.Column('course_id',db.Integer,db.ForeignKey('course.id')))
-class Student(db.Model):
-    __tablename__='student'
-    id=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String(30))
-    course=db.relationship('Course',secondary=tags)
-    def __init__(self,name):
-        self.name=name
-    def __repr__(self):
-        return "name:%r" %self.name
-class Course(db.Model):
-    ___tablename__='course'
-    id=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String(30),unique=True)
-    #student_id=db.Column(db.Integer,db.ForeignKey('student.id'))
-    def __init__(self,name):
-        self.name=name
-    def __repr__(self):
-        return "name:%r" %self.name

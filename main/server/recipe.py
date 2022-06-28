@@ -78,7 +78,7 @@ def process_upload_igd(request):
     # igd_dic["igd_img_url"] = image_information(request)
     igd = Ingredient.query.filter(Ingredient.igd_name == igd_info['igd_name']).first()
     igd_category_list = igd_dic['igd_category'].split(',')
-    igd_category = IGD_category.query.filter(IGD_category.igd_category.in_(igd_category_list)).all()
+    igd_category = IGD_category.query.filter(IGD_category.igd_category_name.in_(igd_category_list)).all()
     if not igd and igd_category:
         igd = Ingredient(igd_name=igd_dic['igd_name'],
                          igd_category=igd_dic["igd_category"],
@@ -87,16 +87,22 @@ def process_upload_igd(request):
                          image_id=igd_dic['image_id'])
         db.session.add(igd)
         db.session.commit()
-        i=0
         for igd_ca in igd_category:
             # print(igd_ca.igd_category)
             # print(i)
             # i+=1
-            igd_ca.igd_id.append(igd)
+            igd_ca.Ingredient.append(igd)
             db.session.add(igd_ca)
 
 
         db.session.commit()
+        test = IGD_category.query.filter(IGD_category.igd_category_name=="egg").first()
+        for i in test.Ingredient:
+            print(type(i))
+            print(i.igd_name)
+        # test2 = Ingredient.query.filter(test).all()
+        # print(test2)
+
 
 
         response_data['message'] = f"{igd_info['igd_name']} upload successfully!!"

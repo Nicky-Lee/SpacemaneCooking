@@ -45,11 +45,11 @@ def db_init():
 if __name__ == '__main__':
     db.drop_all()
     db.create_all()
-    # IGD_category_list = [IGD_category('egg'),
-    #                      IGD_category("milk"),
-    #                      IGD_category("meet")]
-    # db.session.add_all(IGD_category_list)
-    # db.session.commit()
+    IGD_category_list = [IGD_category('egg'),
+                         IGD_category("milk"),
+                         IGD_category("meet")]
+    db.session.add_all(IGD_category_list)
+    db.session.commit()
     # manager.run()
     app.run()
 
