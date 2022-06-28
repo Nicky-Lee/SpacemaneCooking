@@ -15,9 +15,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(120), nullable=True)
-    online = db.Column(db.Boolean, nullable=True)
-    upload_Recipe = db.relationship("Recipe", backref="User")
+    email = db.Column(db.String(120), unique=True,nullable=True)
+    Recipe_id = db.relationship("Recipe", backref="user")
 
     def __init__(self, username, password, email=None):
         self.username = username

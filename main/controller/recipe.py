@@ -11,13 +11,13 @@ Recipe_ns = RecipeDto.Recipe_ns
 
 @Recipe_ns.route("/uploadRecipe")
 class UploadRecipe(Resource):
-    @Recipe_ns.expect(RecipeDto.Recipe_model)
+    @Recipe_ns.expect(RecipeDto.Recipe_model_upload)
     @token_required
     def post(self):
-        try:
+        # try:
             return process_UploadRecipe(request)
-        except:
-            return 'error request'
+        # except:
+        #     return 'error request'
 
 
 # @Recipe_ns.route("/changeRecipe")
@@ -32,13 +32,12 @@ class UploadRecipe(Resource):
 
 @Recipe_ns.route("/upload_igd_managerment")
 class Upload_igd(Resource):
-    @Recipe_ns.expect(RecipeDto.Ingredient_model)
+    @Recipe_ns.expect(RecipeDto.Ingredient_model_upload)
     def post(self):
-        try:
-            print(json.loads(request.data))
-            return process_upload_igd(json.loads(request.data))
-        except:
-            return 'error request'
+        # try:
+            return process_upload_igd(request)
+        # except:
+        #     return 'error request'
 
 
 @Recipe_ns.route("/SearchRecipe")

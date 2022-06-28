@@ -68,11 +68,11 @@ class UserSignup(Resource):
     @user_ns.expect(UserDto.user_UserSignup_data_model_expect)
     @user_ns.response(200, "success", UserDto.user_UserSignup_model_response)
     def post(self):
-        try:
+        # try:
             return process_signup_v1(json.loads(request.data))
 
-        except:
-            return 'error request'
+        # except:
+        #     return 'error request'
 
 
 @user_ns.route("/forgetpassword")

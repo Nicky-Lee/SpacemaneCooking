@@ -1,5 +1,5 @@
 from ..model.user import User, UserInf
-from ..model.Recipe import Recipe, Ingredient
+from ..model.Recipe import Recipe, Ingredient,IGD_category
 from flask import make_response, jsonify
 from .. import *
 from sqlalchemy import and_, or_
@@ -22,31 +22,33 @@ def process_UploadRecipe(request):
     status_code = 200
     R_dic = {"R_name": R_info['R_name'],
              "user_id": user.id,
-             "R_description": None,
-             "R_category": None,
+             "R_description": R_info['R_description'],
+             "R_category": R_info['R_category'],
              "R_calorie": 0,
              "R_img_url": None,
+             "R_igd_list": R_info['R_igd_list'],
              "message": "fail to upload！"}
+    R_igd_list = R_info["R_igd_list"].split(',')
+    R_igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(R_igd_list))
 
     Rec = Recipe.query.filter_by(R_name=R_info['R_name']).first()
-    print(1)
     if not Rec:
         for key in R_info.keys():
             if key in R_dic.keys():
                 R_dic[key] = R_info[key]
 
-        print(2)
         Rec = Recipe(R_name=R_dic['R_name'],
                      R_category=R_dic["R_category"],
                      user_id=R_dic['user_id'],
                      R_description=R_dic['R_description'],
                      R_calorie=R_dic['R_calorie'],
-                     R_img_url=R_dic['R_img_url'])
-        print(3)
+                     R_img_url=R_dic['image_id'])
+        for igd in R_igd_list:
+            igd.recipe.append(Rec)
+            db.session.add(igd)
+
         db.session.add(Rec)
-        print(4)
         db.session.commit()
-        print(5)
 
         R_dic['message'] = f"{R_info['R_name']} upload successfully!!"
     else:
@@ -65,29 +67,38 @@ def process_upload_igd(request):
 
     response_data = {"igd_name": igd_info['igd_name'], "message": "fail to upload！"}
     status_code = 200
-    igd_dic = {"igd_name": None,
-               "igd_category": None,
-               "igd_opponent": None,
-               "igb_description": None,
-               "igd_calorie": 0
-               }
+    igd_dic = {
+        "igd_name": igd_info['igd_name'],
+        "igd_category": igd_info['igd_category'],
+        "igd_opponent": igd_info['igd_opponent'],
+        "igd_calorie": igd_info['igd_calorie'],
+        "image_id": igd_info["image_id"]
+    }
 
-    igd_dic["igd_img_url"] = image_information(request)
-    # print(image_information(request))
+    # igd_dic["igd_img_url"] = image_information(request)
     igd = Ingredient.query.filter(Ingredient.igd_name == igd_info['igd_name']).first()
-    if not igd:
-        for key in igd_info.keys():
-            if key in igd_dic.keys():
-                igd_dic[key] = igd_info[key]
-
+    igd_category_list = igd_dic['igd_category'].split(',')
+    igd_category = IGD_category.query.filter(IGD_category.igd_category.in_(igd_category_list)).all()
+    if not igd and igd_category:
         igd = Ingredient(igd_name=igd_dic['igd_name'],
                          igd_category=igd_dic["igd_category"],
                          igd_opponent=igd_dic['igd_opponent'],
-                         igb_description=igd_dic['igb_description'],
                          igd_calorie=igd_dic['igd_calorie'],
-                         igd_img_url=igd_dic['igd_img_url'])
+                         image_id=igd_dic['image_id'])
         db.session.add(igd)
         db.session.commit()
+        i=0
+        for igd_ca in igd_category:
+            # print(igd_ca.igd_category)
+            # print(i)
+            # i+=1
+            igd_ca.igd_id.append(igd)
+            db.session.add(igd_ca)
+
+
+        db.session.commit()
+
+
         response_data['message'] = f"{igd_info['igd_name']} upload successfully!!"
     else:
         response_data['message'] = f"{igd_info['igd_name']} already exist!!"

@@ -3,6 +3,7 @@ from flask_script import Manager
 from main import app
 from main.model.Recipe import *
 from main.model.user import *
+# from main.model.Recipe import IGD_category
 from main.api import blueprint
 
 
@@ -44,6 +45,11 @@ def db_init():
 if __name__ == '__main__':
     db.drop_all()
     db.create_all()
+    # IGD_category_list = [IGD_category('egg'),
+    #                      IGD_category("milk"),
+    #                      IGD_category("meet")]
+    # db.session.add_all(IGD_category_list)
+    # db.session.commit()
     # manager.run()
     app.run()
 

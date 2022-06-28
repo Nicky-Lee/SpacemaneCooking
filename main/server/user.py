@@ -22,12 +22,12 @@ def process_login_v1(user_info):
     status_code = 200
     user = User.query.filter_by(username=user_info["username"]).first()
     if user is None:
-        response_data['message'] = 'failed,user is None'
+        response_data['message'] = 'failed,username or password error!'
         status_code = 400
         print('zheli')
 
     elif user.password != user_info['password']:
-        response_data['message'] = 'failed, password error'
+        response_data['message'] = "failed,username or password error!"
         status_code = 400
 
     if status_code == 200:
@@ -37,27 +37,26 @@ def process_login_v1(user_info):
         response_data['id'] = user.id
 
     resp = make_response(jsonify(response_data))
-    print(resp)
     resp.status_code = status_code
 
     return resp
 
-
-def process_login_v2(user_info):
-    response_data = {"username": user_info['username'], "message": "success"}
-    status_code = 200
-
-    user = User.query.filter_by(username=user_info["username"]).first()
-    if user is None:
-        response_data['message'] = 'failed,user is None'
-        status_code = 400
-
-    if user.password != user_info['password']:
-        response_data['message'] = 'failed, password error'
-        status_code = 400
-    resp = make_response(jsonify(response_data))
-    resp.status_code = status_code
-    return user
+#
+# def process_login_v2(user_info):
+#     response_data = {"username": user_info['username'], "message": "success"}
+#     status_code = 200
+#
+#     user = User.query.filter_by(username=user_info["username"]).first()
+#     if user is None:
+#         response_data['message'] = 'failed,user is None'
+#         status_code = 400
+#
+#     if user.password != user_info['password']:
+#         response_data['message'] = 'failed, password error'
+#         status_code = 400
+#     resp = make_response(jsonify(response_data))
+#     resp.status_code = status_code
+#     return user
 
 
 def valid_regist(username, email):
@@ -84,10 +83,11 @@ def process_signup_v1(user_info):
     status_code = 200
     if user_info['password1'] != user_info['password2']:
         response_data['message'] = 'The passwords are different！'
+        status_code = 400
 
     elif password_invalid(user_info['password1']):
         response_data['message'] = 'The password is invalid！'
-        status_code = 411
+        status_code = 400
 
     elif valid_regist(user_info['username'], user_info['email']):
         user = User(username=user_info['username'], password=user_info['password1'],
@@ -99,7 +99,6 @@ def process_signup_v1(user_info):
 
     else:
         response_data['message'] = 'The username or email address is already registered！'
-
     resp = make_response(jsonify(response_data))
     resp.status_code = status_code
 
@@ -115,9 +114,8 @@ def process_forgetpassword_v1(request):
     status_code = 200
     user = User.query.filter_by(username=user_info["username"]).first()
 
-
     if user is None:
-        response_data['message'] = f'username not exist!'
+        response_data['message'] = f'failed, username or username error!'
         status_code = 400
 
     elif user.email == user_info['email']:
@@ -125,9 +123,8 @@ def process_forgetpassword_v1(request):
 
 
     else:
-        response_data['message'] = 'failed, email error!'
+        response_data['message'] = 'failed, username or username error!'
         status_code = 400
-    print(response_data['message'])
     resp = make_response(jsonify(response_data))
     resp.status_code = status_code
     return resp
