@@ -111,21 +111,23 @@ def process_forgetpassword_v1(request):
     # token = request.headers.get("token")
     # user = TOKEN.validate_token(token)
     user_info = json.loads(request.data)
-    response_data = {"username":user_info['username'], "message": 'Information error'}
+    response_data = {"username":user_info["username"], "message": 'Information error'}
     status_code = 200
+    user = User.query.filter_by(username=user_info["username"]).first()
 
-    user = User.query.filter(User.username == user_info['username']).first()
+
     if user is None:
         response_data['message'] = f'username not exist!'
         status_code = 400
 
-    if user.email == user_info['email']:
+    elif user.email == user_info['email']:
         response_data['message'] = f'success, password is {user.password}'
-        print(1)
+
 
     else:
         response_data['message'] = 'failed, email error!'
         status_code = 400
+    print(response_data['message'])
     resp = make_response(jsonify(response_data))
     resp.status_code = status_code
     return resp

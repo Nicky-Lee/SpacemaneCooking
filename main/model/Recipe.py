@@ -18,7 +18,7 @@ class Recipe(db.Model):
     R_description = db.Column(db.String(240), nullable=True)
     R_category = db.Column(db.String(120), nullable=True)
     R_calorie = db.Column(db.Integer, nullable=True)
-    R_img_url = db.Column(db.BLOB)
+    R_img_url = db.Column(db.String(120))
 
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

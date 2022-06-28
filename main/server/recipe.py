@@ -7,10 +7,11 @@ import json
 from ..util.token import TOKEN
 
 
-# def image_information(request):
-#     data = db.session.query(Ingredient.name,Ingredient.days)
-#
-#     return data
+def image_information(request):
+    data = request.Tests
+    print(data)
+
+    return data
 
 
 def process_UploadRecipe(request):
@@ -41,8 +42,11 @@ def process_UploadRecipe(request):
                      R_description=R_dic['R_description'],
                      R_calorie=R_dic['R_calorie'],
                      R_img_url=R_dic['R_img_url'])
+        print(3)
         db.session.add(Rec)
+        print(4)
         db.session.commit()
+        print(5)
 
         R_dic['message'] = f"{R_info['R_name']} upload successfully!!"
     else:

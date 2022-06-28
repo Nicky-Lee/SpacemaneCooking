@@ -40,7 +40,7 @@ user_ns = UserDto.user_ns
 
 @user_ns.route("/userInfo")
 class userInfo(Resource):
-    # @user_ns.expect(UserDto.user_model)
+    @user_ns.expect(UserDto.user_model)
     @user_ns.response(200, "success", UserDto.user_model)
     def get(self):
         # if "address" in  request.args().keys():
@@ -80,7 +80,7 @@ class Forgetpassword(Resource):
     @user_ns.expect(UserDto.user_Forgetpassword_data_model_expect)
     @user_ns.response(200, "success", UserDto.user_Forgetpassword_model_response)
     # @token_required
-    def get(self):
+    def post(self):
         try:
             print(json.loads(request.data))
             return process_forgetpassword_v1(request)

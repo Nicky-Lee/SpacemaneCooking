@@ -32,7 +32,7 @@ class UploadRecipe(Resource):
 
 @Recipe_ns.route("/upload_igd_managerment")
 class Upload_igd(Resource):
-    @Recipe_ns.expect(RecipeDto.Recipe_model)
+    @Recipe_ns.expect(RecipeDto.Ingredient_model)
     def post(self):
         try:
             print(json.loads(request.data))
