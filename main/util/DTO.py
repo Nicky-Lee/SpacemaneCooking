@@ -77,7 +77,7 @@ class RecipeDto():
                                               "R_calorie": fields.String,
                                               "image_id": fields.String,
                                               "user_id": fields.Integer,
-                                              "R_igd_list": fields.String
+                                              "igd_list": fields.String
                                           })
 
     Recipe_model = Recipe_ns.model("Recipe_model",
@@ -135,20 +135,23 @@ class SearchDto():
 
 
 
-    search_igd_list_model = search_ns.model("search_igd_list_model",
-                                            {
-                                                "number":fields.Integer,
-                                                "igd_list":fields.List(fields.Nested(search_igd_model))
-                                            })
+    # search_igd_list_model = search_ns.model("search_igd_list_model",
+    #                                         {
+    #                                             "igd_list":fields.List(fields.Nested(search_igd_model))
+    #                                         })
+
+    search_igd_list_model = search_ns.model("search_igd_list_model",search_igd_model)
+
     search_recipe_model = search_ns.model("search_recipe_model",
                                      {
                                          "igd_name": fields.String,
                                          "R_category":fields.String
                                      })
 
-    search_recipe_list_model_response = search_ns.model("search_recipe_list_model_response",
-                                                        {
-                                                            "recipe_list":fields.List(fields.Nested(RecipeDto.search_list_Recipe_model))
-                                                        })
+    search_recipe_list_model_response = search_ns.model("search_recipe_list_model_response", RecipeDto.Recipe_model)
 
+    # search_recipe_list_model_response = search_ns.model("search_recipe_list_model_response",
+    #                                                     {
+    #                                                         "recipe_list":fields.List(fields.Nested(RecipeDto.Recipe_model))
+    #                                                     })
 

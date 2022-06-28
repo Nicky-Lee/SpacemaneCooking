@@ -26,7 +26,7 @@ class search_igd_list(Resource):
     def get(self):
         # try:
         # process_search_igd(request)
-            return marshal(process_search_igd(request),SearchDto.search_igd_list_model),200
+            return marshal(process_search_igd_list(request),SearchDto.search_igd_list_model),200
         # except:
         #     return 'error request'
 
@@ -37,6 +37,6 @@ class Search_recipe(Resource):
     def get(self):
         # try:
         # process_search_igd(request)
-            return marshal(process_search_igd(request),SearchDto.search_recipe_list_model_response),200
+            return marshal(process_Search_recipe(request),SearchDto.search_recipe_list_model_response),200
         # except:
         #     return 'error request'

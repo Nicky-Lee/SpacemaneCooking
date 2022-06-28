@@ -5,7 +5,14 @@ from .. import *
 from sqlalchemy import and_, or_
 import json
 from ..util.token import TOKEN
+"""R_category_num={
 
+1:breakfast
+2:lunch
+3:dinner
+4:dessert
+5:else
+}"""
 
 def image_information(request):
     data = request.Tests
@@ -26,16 +33,15 @@ def process_UploadRecipe(request):
              "R_category": R_info['R_category'],
              "R_calorie": 0,
              "image_id": None,
-             "R_igd_list": R_info['R_igd_list'],
+             "igd_list": R_info['igd_list'],
              "message": "fail to upload！"}
-    R_igd_list = R_info["R_igd_list"].split(',')
-    R_igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(R_igd_list))
+    igd_list = R_info["igd_list"].split(',')
+    igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_list)).all()
 
     Rec = Recipe.query.filter_by(R_name=R_info['R_name']).first()
-    if not Rec:
-        for key in R_info.keys():
-            if key in R_dic.keys():
-                R_dic[key] = R_info[key]
+    if Rec is None and igd_list is not None:
+        if R_dic['R_description'] not in ['breakfast','lunch','dinner','dessert']:
+            R_dic['R_description'] = 'else'
 
         Rec = Recipe(R_name=R_dic['R_name'],
                      R_category=R_dic["R_category"],
@@ -43,8 +49,8 @@ def process_UploadRecipe(request):
                      R_description=R_dic['R_description'],
                      R_calorie=R_dic['R_calorie'],
                      R_img_url=R_dic['image_id'])
-        for igd in R_igd_list:
-            igd.recipe.append(Rec)
+        for igd in igd_list:
+            igd.Recipe.append(Rec)
             db.session.add(igd)
 
         db.session.add(Rec)
@@ -54,6 +60,10 @@ def process_UploadRecipe(request):
     else:
         R_dic['message'] = f"{R_info['R_name']} already exist!!"
         status_code = 400
+
+    Rec = Recipe.query.filter_by(R_name=R_info['R_name']).first()
+    print(Rec.Ingredient)
+
 
     resp = make_response(jsonify(R_dic))
     resp.status_code = status_code
