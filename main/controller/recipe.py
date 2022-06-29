@@ -33,6 +33,7 @@ class UploadRecipe(Resource):
 @Recipe_ns.route("/upload_igd_managerment")
 class Upload_igd(Resource):
     @Recipe_ns.expect(RecipeDto.Ingredient_model_upload)
+    @token_required
     def post(self):
         # try:
             return process_upload_igd(request)

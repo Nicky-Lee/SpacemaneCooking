@@ -96,6 +96,7 @@ class RecipeDto():
                                        "R_category": fields.String,
                                        "R_calorie": fields.String,
                                        "R_img_url": fields.String,
+                                       'Ingredient_content':fields.String
                                    })
     Ingredient_model = Recipe_ns.model("Ingredient_model",
                                        {
@@ -130,7 +131,9 @@ class SearchDto():
 
     search_igd_model = search_ns.model("search_igd_model",
                                      {
-                                         "igd_name": fields.String
+                                         "igd_name": fields.String,
+                                         'igd_category':fields.String
+
                                      })
 
 
@@ -148,7 +151,13 @@ class SearchDto():
                                          "R_category":fields.String
                                      })
 
-    search_recipe_list_model_response = search_ns.model("search_recipe_list_model_response", RecipeDto.Recipe_model)
+    search_category_igd_model = search_ns.model("search_category_igd_model",
+                                          {
+                                              "igd_category": fields.String
+                                          })
+    search_category_igd_model_response = search_ns.model("search_category_igd_model_response", search_igd_model)
+
+    search_recipe_list_model_response = search_ns.model("search_recipe_list_model_response",  RecipeDto.search_list_Recipe_model)
 
     # search_recipe_list_model_response = search_ns.model("search_recipe_list_model_response",
     #                                                     {

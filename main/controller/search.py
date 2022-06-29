@@ -40,3 +40,14 @@ class Search_recipe(Resource):
             return marshal(process_Search_recipe(request),SearchDto.search_recipe_list_model_response),200
         # except:
         #     return 'error request'
+
+@search_ns.route("/search_category_igd")
+class search_category_igd(Resource):
+    @search_ns.expect(SearchDto.search_recipe_model)
+    @search_ns.response(200,"success",SearchDto.search_category_igd_model_response)
+    def get(self):
+        # try:
+        # process_search_igd(request)
+            return marshal(process_search_category_igd(request),SearchDto.search_category_igd_model_response),200
+        # except:
+        #     return 'error request'
