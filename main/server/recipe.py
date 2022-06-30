@@ -14,8 +14,9 @@ from ..util.token import TOKEN
 5:else
 }"""
 def process_uploadImage(request):
-    data=request
-    print(data)
+    data=request.files
+    print(type(data))
+    print( data  )
     image = Image(data)
     print(image)
     return image
