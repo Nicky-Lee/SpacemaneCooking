@@ -1,4 +1,4 @@
-from flask_restplus import Namespace, Resource
+from flask_restplus import Namespace, Resource,marshal
 from ..util.DTO import RecipeDto
 from ..server.recipe import *
 from flask import request, make_response, jsonify
@@ -49,6 +49,17 @@ class  Select_igd_v1(Resource):
             return process_select_igd_v1(json.loads(request.data))
         except:
             return 'error request'
+
+
+@Recipe_ns.route("/uploadImage")
+class  UploadImage_v1(Resource):
+
+    @Recipe_ns.response(200,"success",RecipeDto.image_model_response)
+    def post(self):
+        # try:
+            return marshal(process_uploadImage(request),RecipeDto.image_model_response),200
+        # except:
+        #     return 'error request'
 
 # # 限制条件
 # # 1，原材料

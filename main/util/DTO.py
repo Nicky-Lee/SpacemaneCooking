@@ -75,7 +75,7 @@ class RecipeDto():
                                               "R_description": fields.String,
                                               "R_category": fields.String,
                                               "R_calorie": fields.String,
-                                              "image_id": fields.String,
+                                              "image_id": fields.Integer,
                                               "user_id": fields.Integer,
                                               "igd_list": fields.String
                                           })
@@ -89,6 +89,11 @@ class RecipeDto():
                                        "R_img_url": fields.String,
                                        "user_id": fields.Integer,
                                        "id": fields.Integer
+                                   })
+    image_model_response = Recipe_ns.model("image_model_response",
+                                   {
+                                       "id": fields.Integer,
+                                       # "image":fields.
                                    })
     search_list_Recipe_model = Recipe_ns.model("search_list_Recipe_model",
                                    {

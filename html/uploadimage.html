@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+ <meta charset="UTF-8">
+
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ <title>Document</title>
+
+ <style>
+
+  .button{
+
+   margin-right: 20px;
+
+  }
+
+  #preview {
+
+   display: flex;
+
+   flex-wrap: wrap;
+
+   width: 1500px;
+
+   padding: 0 10px;
+
+   justify-content: start;
+
+  }
+
+  .icon-po {
+
+   overflow: hidden;
+
+   position: relative;
+
+   width: 300px;
+
+   height: 300px;
+
+   margin-right: 20px;
+
+   margin-top: 20px;
+
+  }
+
+  .icon-close {
+
+   position: absolute;
+
+   right: 5%;
+
+   top: 5%;
+
+   width: 30px;
+
+   height: 30px;
+
+   border-radius: 50%;
+
+   background-color: red;
+
+   color: #fff;
+
+   font-size: 12px;
+
+   display: flex;
+
+   align-items: center;
+
+   justify-content: center;
+
+  }
+
+  .pic{
+
+   width: 300px;
+
+   height: 300px;
+
+  }
+
+ </style>
+
+</head>
+
+<body>
+
+ 选择文件（允许多文件）:
+
+ <input type="file" id="f1" multiple> //multiple开启多选
+
+ <button type="button" class="button" id="btn-submit">预览图片</button>
+
+ <button type="button" id="complate">上传图片</button>
+
+ <div id="preview"></div>
+
+ <br />
+
+ <script>
+
+  let e = 0
+
+  let fd = new FormData() //文件传输一定要使用ForData对象
+
+  let fL = []
+
+  function submitUpload() {
+
+   let fileList = document.getElementById('f1').files
+
+   for (let i = 0; i < fileList.length; i++) {
+
+    fL.push(fileList[i])
+
+   }
+
+   //渲染出图片
+
+   //FileReader 读取文件的方式为readAsDataURL时会触发
+
+   function readAndPreview(file) {
+
+    // 确保 `file.name` 符合我们要求的扩展名
+
+    if (/\.(jpe?g|png|gif|mp4)$/i.test(file.name)) {
+
+     //FileReader 对象允许Web应用程序异步读取存储在用户计算机上的文件
+
+     //（或原始数据缓冲区）的内容 
+
+     //这里是读取到input返回出来的fileList中文件
+
+     var reader = new FileReader();
+
+     //该事件在FileReader对象读取操作完成时触发
+
+     reader.addEventListener("load", function () {
+
+      //创建出两个div 一个用做父容器 一个做删除按钮
+
+      var div1 = document.createElement('div');
+
+      var div2 = document.createElement('div');
+
+      //创建一个Image Dom 用来做渲染图片
+
+      var dom = new Image() //当然要是想渲染视频的话就创建一个video标签就好啦
+
+      //给创建的Dom添加类名用于设计样式
+
+      div1.className = 'icon-po'
+
+      div2.className = 'icon-close'
+
+      div2.innerHTML = 'X'
+         dom.className = 'pic'
+
+      //给生成的每个图片盒子添加index属性
+
+      div1.index = div2.index = e
+
+      e++
+
+      //给删除按钮添加上点击事件
+
+      div2.onclick = (e) => {
+
+       console.log(e.target.index)
+
+       div1.remove()
+
+       fL.splice(e.target.index, 1, "")
+
+       console.log(fL);
+
+      }
+
+      //设置img的样式
+
+      dom.width = 300;
+            dom.height = 300;
+
+      dom.title = file.name;
+
+      //该 result属性包含作为数据的数据: URL将文件的数据表示为 base64 编码的字符串。
+
+      dom.src = this.result;
+
+      //将创建出的dom添加进对应的dom中去
+
+      div1.appendChild(dom)
+
+      div1.appendChild(div2)
+
+      preview.appendChild(div1);
+
+     }, false);
+
+     //调用readAsDataURL()方法拿到result
+
+     reader.readAsDataURL(file);
+
+    }
+
+   }
+
+   //拿到input中的fileList中的文件对象进行渲染出图片
+
+   if (fileList) {
+
+    [].forEach.call(fileList, readAndPreview);
+
+   }
+
+   if (!fileList.length) {
+
+    alert('请选择文件')
+
+    return
+
+   }
+
+  }
+
+
+
+  function complate() {
+
+   //筛选出未删除的文件
+
+   fL.forEach(async (item) => {
+
+    if (typeof item === "string") {
+
+     console.log(item);
+
+    } else {
+
+     fd.append('files', item)//将没有别删除的文件加入到FormData对象中
+
+    }
+
+})
+
+//向后端发送请求
+
+let xhr = new XMLHttpRequest()
+
+xhr.open('POST', 'http://localhost:5000/Recipe/uploadImage', true)
+
+xhr.send(fd)
+
+xhr.onreadystatechange = function () {
+
+if (this.readyState == 4 && this.status == 200) {
+
+let obj = JSON.parse(xhr.responseText)
+
+console.log(obj);
+
+ }
+      }
+
+}
+
+document.getElementById('btn-submit').addEventListener('click', submitUpload)
+
+document.getElementById('complate').addEventListener('click', complate)
+
+</script>
+
+</body>
+
+\
+
+
+</html>

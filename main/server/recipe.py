@@ -1,5 +1,5 @@
 from ..model.user import User, UserInf
-from ..model.Recipe import Recipe, Ingredient,IGD_category
+from ..model.Recipe import Recipe, Ingredient,IGD_category,Image
 from flask import make_response, jsonify
 from .. import *
 from sqlalchemy import and_, or_
@@ -13,12 +13,20 @@ from ..util.token import TOKEN
 4:dessert
 5:else
 }"""
-
-def image_information(request):
-    data = request.Tests
+def process_uploadImage(request):
+    data=request
     print(data)
+    image = Image(data)
+    print(image)
+    return image
+    # return request
 
-    return data
+#
+# def image_information(request):
+#     data = request.Tests
+#     print(data)
+#
+#     return data
 
 
 def process_UploadRecipe(request):
@@ -36,9 +44,9 @@ def process_UploadRecipe(request):
              "igd_list": R_info['igd_list'],
              "message": "fail to upload！"}
     igd_list = R_info["igd_list"].split(',')
-    print(igd_list)
+    # print(igd_list)
     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_list)).all()
-    print(igd_list)
+    # print(igd_list)
 
     Rec = Recipe.query.filter_by(R_name=R_info['R_name']).first()
     if igd_list == []:
@@ -46,13 +54,17 @@ def process_UploadRecipe(request):
     elif Rec is None and igd_list != []:
         if R_dic['R_description'] not in ['breakfast','lunch','dinner','dessert']:
             R_dic['R_description'] = 'else'
-
+        image = Image.query.filter(Image.id == R_dic['image_id']).first()
+        if image.image is None:
+            image = None
+        else:
+            image = image.image
         Rec = Recipe(R_name=R_dic['R_name'],
                      R_category=R_dic["R_category"],
                      user_id=R_dic['user_id'],
                      R_description=R_dic['R_description'],
                      R_calorie=R_dic['R_calorie'],
-                     R_img_url=R_dic['image_id'],
+                     image=image,
                      Ingredient_content = R_info['igd_list'])
         for igd in igd_list:
             igd.Recipe.append(Rec)
