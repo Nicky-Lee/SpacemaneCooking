@@ -7,7 +7,7 @@ import json
 from flask_mail import Mail, Message
 from .. import mail
 
-
+import re
 
 # get
 def process_userInfo_v1(request):
@@ -63,10 +63,11 @@ def process_login_v1(user_info):
 def valid_regist(username, email):
     user = User.query.filter(or_(User.username == username, User.email == email)).first()
 
+
     if user:
-        return False
+            return False
     else:
-        return True
+            return True
 
 
 def password_invalid(password):
@@ -83,6 +84,7 @@ def password_invalid(password):
 def process_signup_v1(user_info):
     response_data = {"username": user_info['username'], "message": "fail to sign in！"}
     status_code = 0
+    password_rule = re.compile(r'[0-9a-zA-Z_]{6,20}')
     if user_info['password1'] != user_info['password2']:
         response_data['message'] = 'The passwords are different！'
         status_code = 400
@@ -90,6 +92,18 @@ def process_signup_v1(user_info):
     elif password_invalid(user_info['password1']):
         response_data['message'] = 'The password is invalid！'
         status_code = 400
+
+    elif user_info['username'].isalpha():
+        response_data['message'] = "The username isvalid ！！"
+        status_code = 400
+    elif password_rule.fullmatch(user_info['password1']):
+        response_data['message'] = "The password isvalid ！！"
+        status_code = 400
+
+    elif len(user_info['username']) < 1 and len(user_info['username']) > 15:
+        response_data['message'] = "The username isvalid ！！"
+        status_code = 400
+
 
     elif valid_regist(user_info['username'], user_info['email']):
         user = User(username=user_info['username'], password=user_info['password1'],
