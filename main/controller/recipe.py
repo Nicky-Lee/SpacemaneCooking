@@ -9,6 +9,27 @@ from ..util.decorator import token_required
 Recipe_ns = RecipeDto.Recipe_ns
 # /auth/login
 
+
+
+@Recipe_ns.route("/image_upload")
+class image_upload(Resource):
+    # @Recipe_ns.expect(RecipeDto.Recipe_model_upload)
+    @token_required
+    def post(self):
+        # try:
+        #     print('1221')
+            return process_image_upload(request)
+
+
+@Recipe_ns.route("/image_get")
+class image_get(Resource):
+    # @Recipe_ns.expect(RecipeDto.Recipe_model_upload)
+    # @token_required
+    def post(self):
+        # try:
+        return process_image_get(request)
+
+
 @Recipe_ns.route("/uploadRecipe")
 class UploadRecipe(Resource):
     @Recipe_ns.expect(RecipeDto.Recipe_model_upload)
@@ -44,7 +65,7 @@ class Upload_igd(Resource):
 @Recipe_ns.route("/SearchRecipe")
 class  Select_igd_v1(Resource):
 
-    def get(self):
+    def post(self):
         try:
             return process_select_igd_v1(json.loads(request.data))
         except:

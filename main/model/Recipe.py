@@ -45,13 +45,13 @@ class Recipe(db.Model):
     Ingredient = db.relationship('Ingredient', secondary=recipe_ingredient)
     click = db.Column(db.Integer)
 
-    def __init__(self, R_name, user_id, R_description=None, R_category=None, R_calorie=0, R_img_url=None,Ingredient_content=None,click=0):
+    def __init__(self, R_name, user_id, R_description=None, R_category=None, R_calorie=0, image_id=None,Ingredient_content=None,click=0):
         self.R_name = R_name
         self.R_description = R_description
         self.R_category = R_category
         self.R_calorie = R_calorie
         self.user_id = user_id
-        self.R_img_url = R_img_url
+        self.image_id = image_id
         self.Ingredient_content=Ingredient_content
         self.click=click
 
@@ -83,7 +83,7 @@ class Ingredient(db.Model):
     igd_category = db.Column(db.String(120), nullable=True)
     igd_opponent = db.Column(db.String(80))
     igd_calorie = db.Column(db.Integer, nullable=True)
-    image_id = db.Column(db.Integer)
+    # image_id = db.Column(db.Integer)
     Recipe = db.relationship('Recipe', secondary=recipe_ingredient)
 
     # student_id=db.Column(db.Integer,db.ForeignKey('student.id'))
@@ -94,6 +94,15 @@ class Ingredient(db.Model):
         self.igd_opponent = igd_opponent
         self.igb_description = igb_description
         self.igd_calorie = igd_calorie
-        self.image_id = image_id
+        # self.image_id = image_id
 
 
+class Image(db.Model):
+    ___tablename__ = 'image'
+    id = db.Column(db.Integer, primary_key=True)
+    image = db.Column(db.BLOB, nullable=False)
+
+
+    # student_id=db.Column(db.Integer,db.ForeignKey('student.id'))
+    def __init__(self, image):
+        self.image = image

@@ -14,7 +14,6 @@ def process_userInfo_v1(request):
     token = request.headers.get("token")
     user = TOKEN.validate_token(token)
 
-
     return user
 
 
@@ -22,18 +21,17 @@ def process_userInfo_v1(request):
 # get
 def process_login_v1(user_info):
     response_data = {"username": user_info['username'], "email": None, "id": None, "message": "success", "token": None}
-    status_code = 200
+    status_code = 0
     user = User.query.filter_by(username=user_info["username"]).first()
     if user is None:
         response_data['message'] = 'failed,username or password error!'
         status_code = 400
-        print('zheli')
 
     elif user.password != user_info['password']:
         response_data['message'] = "failed,username or password error!"
         status_code = 400
 
-    if status_code == 200:
+    if status_code == 0:
         token = TOKEN.generate_token(user.id)
         response_data['token'] = token
         response_data['email'] = user.email
@@ -47,7 +45,7 @@ def process_login_v1(user_info):
 #
 # def process_login_v2(user_info):
 #     response_data = {"username": user_info['username'], "message": "success"}
-#     status_code = 200
+#     status_code = 0
 #
 #     user = User.query.filter_by(username=user_info["username"]).first()
 #     if user is None:
@@ -64,8 +62,7 @@ def process_login_v1(user_info):
 
 def valid_regist(username, email):
     user = User.query.filter(or_(User.username == username, User.email == email)).first()
-    if "@" not in email:
-        return False
+
     if user:
         return False
     else:
@@ -85,7 +82,7 @@ def password_invalid(password):
 # post
 def process_signup_v1(user_info):
     response_data = {"username": user_info['username'], "message": "fail to sign in！"}
-    status_code = 200
+    status_code = 0
     if user_info['password1'] != user_info['password2']:
         response_data['message'] = 'The passwords are different！'
         status_code = 400
@@ -102,8 +99,12 @@ def process_signup_v1(user_info):
 
         response_data['message'] = "register successfully！"
 
+    elif "@" not in user_info['email']:
+        response_data['message'] = "The email is invalid！！"
+        status_code = 400
     else:
         response_data['message'] = 'The username or email address is already registered！'
+        status_code = 400
     resp = make_response(jsonify(response_data))
     resp.status_code = status_code
 
@@ -122,7 +123,7 @@ def process_forgetpassword_v1(request):
     # user = TOKEN.validate_token(token)
     user_info = json.loads(request.data)
     response_data = {"username":user_info["username"], "message": 'Information error'}
-    status_code = 200
+    status_code = 0
     user = User.query.filter_by(username=user_info["username"]).first()
 
     if user is None:
@@ -153,7 +154,7 @@ def process_changpassword_v1(request):
 
     user_info = json.loads(request.data)
     response_data = {"username": None, "new_password":None,"message": 'Information error'}
-    status_code = 200
+    status_code = 0
 
     # user = User.query.filter_by(username=user_id).first()
     response_data['username'] = user.username
@@ -174,7 +175,7 @@ def process_changpassword_v1(request):
             db.session.commit()
             response_data['message'] = f'success'
             response_data['new_password'] = user_info['new_password']
-            status_code = 200
+            status_code = 0
 
     else:
         response_data['message'] = 'failed, password error'

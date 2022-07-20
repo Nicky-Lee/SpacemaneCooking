@@ -1,10 +1,11 @@
 from ..model.user import User, UserInf
-from ..model.Recipe import Recipe, Ingredient,IGD_category
+from ..model.Recipe import Recipe, Ingredient,IGD_category,Image
 from flask import make_response, jsonify
 from .. import *
 from sqlalchemy import and_, or_
 import json
 from ..util.token import TOKEN
+import random
 """R_category_num={
 
 1:breakfast
@@ -14,11 +15,31 @@ from ..util.token import TOKEN
 5:else
 }"""
 
-def image_information(request):
-    data = request.Tests
-    print(data)
 
-    return data
+def process_image_upload(request):
+    # print(1)
+    data = request.files['file']
+    # print(data)
+    image = Image(data.read())
+    db.session.add(image)
+    db.session.commit()
+    # print(image)
+    response_data = {'image_id':image.id}
+
+    resp = make_response(jsonify(response_data))
+    resp.status_code = 0
+    return resp
+
+
+def process_image_get(request):
+    image_id =json.loads(request.data)['image_id']
+    image = Image.query.filter(Image.id ==image_id).first()
+    # response_data = {'image': image.image}
+    # print(image.image)
+
+    resp = make_response(image.image)
+    resp.status_code = 0
+    return resp
 
 
 def process_UploadRecipe(request):
@@ -26,7 +47,7 @@ def process_UploadRecipe(request):
     user = TOKEN.validate_token(token)
     R_info = json.loads(request.data)
 
-    status_code = 200
+    status_code = 0
     R_dic = {"R_name": R_info['R_name'],
              "user_id": user.id,
              "R_description": R_info['R_description'],
@@ -44,16 +65,17 @@ def process_UploadRecipe(request):
     if igd_list == []:
         R_dic['message'] = f"Ingredient not exist!!"
     elif Rec is None and igd_list != []:
-        if R_dic['R_category'] not in ['breakfast','lunch','dinner','dessert']:
-            R_dic['R_category'] = 'else'
+        # if R_dic['R_category'] not in ['breakfast','lunch','dinner','dessert']:
+        #     R_dic['R_category'] = 'else'
 
         Rec = Recipe(R_name=R_dic['R_name'],
                      R_category=R_dic["R_category"],
                      user_id=R_dic['user_id'],
                      R_description=R_dic['R_description'],
                      R_calorie=R_dic['R_calorie'],
-                     R_img_url=R_dic['image_id'],
-                     Ingredient_content = R_info['igd_list'])
+                     image_id=R_dic['image_id'],
+                     Ingredient_content = R_info['igd_list'],
+                     click = random.randint(1,100))
         for igd in igd_list:
             igd.Recipe.append(Rec)
             db.session.add(igd)
@@ -81,7 +103,7 @@ def process_upload_igd(request):
     igd_info = json.loads(request.data)
 
     response_data = {"igd_name": igd_info['igd_name'], "message": "fail to upload！"}
-    status_code = 200
+    status_code = 0
     igd_dic = {
         "igd_name": igd_info['igd_name'],
         "igd_category": igd_info['igd_category'],
@@ -103,9 +125,7 @@ def process_upload_igd(request):
         db.session.add(igd)
         db.session.commit()
         for igd_ca in igd_category:
-            # print(igd_ca.igd_category)
-            # print(i)
-            # i+=1
+
             igd_ca.Ingredient.append(igd)
             db.session.add(igd_ca)
 
@@ -131,7 +151,7 @@ def process_upload_igd(request):
 # get
 def process_select_igd_v1(igd_info):
     response_data = {"igd_name": igd_info['igd_name'], "message": "success"}
-    status_code = 200
+    status_code = 0
 
     igd = Ingredient.query.filter_by(username=igd_info["igd_name"]).first()
     if igd is None:
