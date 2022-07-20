@@ -122,7 +122,7 @@ def process_get_all_R_tag(request):
             # print(each_tag)
     response_data = {"all_R_tag": all_R_tag_list}
 
-    status_code = 0
+    status_code = 200
 
     resp = make_response(jsonify(response_data))
     resp.status_code = status_code

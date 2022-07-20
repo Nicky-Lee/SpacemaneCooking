@@ -15,8 +15,11 @@ class user_recipe(Resource):
     @search_ns.response(0,"success",SearchDto.search_recipe_list_model_response)
     @token_required
     def post(self):
-
-            return marshal(process_user_recipe(request),SearchDto.search_recipe_list_model_response),0
+        tmp = marshal(process_user_recipe(request),SearchDto.search_recipe_list_model_response)
+        if tmp ==[] or tmp is None:
+            return tmp,0
+        else:
+            return tmp, 200
 
 
 @search_ns.route("/initial_recommend")
@@ -24,8 +27,11 @@ class initial_recommend(Resource):
     # @search_ns.expect(SearchDto.search_recipe_model)
     @search_ns.response(0,"success",SearchDto.search_recipe_list_model_response)
     def post(self):
-
-            return marshal(process_initial_recommend(),SearchDto.search_recipe_list_model_response),0
+        tmp = marshal(process_initial_recommend(),SearchDto.search_recipe_list_model_response)
+        if tmp == [] or tmp is None:
+            return tmp, 0
+        else:
+            return tmp, 200
 
 @search_ns.route("/select_recipe")
 class select_recipe(Resource):
@@ -33,7 +39,12 @@ class select_recipe(Resource):
     @search_ns.response(0,"success",SearchDto.select_R_model_response)
     def post(self):
         # try:
-            return marshal(process_select_recipe(request),SearchDto.select_R_model_response),0
+        tmp =  marshal(process_select_recipe(request),SearchDto.select_R_model_response)
+
+        if tmp == [] or tmp is None:
+            return tmp, 0
+        else:
+            return tmp, 200
 
 
 @search_ns.route("/search_igd")
@@ -42,10 +53,12 @@ class Search_igd(Resource):
     @search_ns.response(0,"success",SearchDto.search_igd_list_model)
     def post(self):
         # try:
-            return marshal(process_search_igd(request),SearchDto.search_igd_list_model),0
-            # return process_search_igd(request)
-        # except:
-        #     return 'error request'
+        tmp =  marshal(process_search_igd(request),SearchDto.search_igd_list_model)
+
+        if tmp == [] or tmp is None:
+            return tmp, 0
+        else:
+            return tmp, 200
 
 @search_ns.route("/search_igd_list")
 class search_igd_list(Resource):
@@ -54,9 +67,12 @@ class search_igd_list(Resource):
     def post(self):
         # try:
         # process_search_igd(request)
-            return marshal(process_search_igd_list(request),SearchDto.search_igd_list_model),0
-        # except:
-        #     return 'error request'
+        tmp =  marshal(process_search_igd_list(request),SearchDto.search_igd_list_model)
+        #
+        if tmp == [] or tmp is None:
+            return tmp, 0
+        else:
+            return tmp, 200
 
 @search_ns.route("/search_recipe")
 class Search_recipe(Resource):
@@ -65,9 +81,12 @@ class Search_recipe(Resource):
     def post(self):
         # try:
         # process_search_igd(request)
-            return marshal(process_Search_recipe(request),SearchDto.search_recipe_list_model_response),0
-        # except:
-        #     return 'error request'
+        tmp =  marshal(process_Search_recipe(request),SearchDto.search_recipe_list_model_response)
+
+        if tmp == [] or tmp is None:
+            return tmp, 0
+        else:
+            return tmp, 200
 
 @search_ns.route("/search_category_igd")
 class search_category_igd(Resource):
@@ -76,9 +95,12 @@ class search_category_igd(Resource):
     def post(self):
         # try:
         # process_search_igd(request)
-            return marshal(process_search_category_igd(request),SearchDto.search_category_igd_model_response),0
-        # except:
-        #     return 'error request'
+        tmp = marshal(process_search_category_igd(request),SearchDto.search_category_igd_model_response)
+
+        if tmp == [] or tmp is None:
+            return tmp, 0
+        else:
+            return tmp, 200
 
 @search_ns.route("/get_all_igd_category")
 class get_all_igd_category(Resource):
@@ -86,9 +108,12 @@ class get_all_igd_category(Resource):
     def post(self):
         # try:
         # process_search_igd(request)
-            return marshal(process_get_all_igd_category(request),SearchDto.search_all_igd_category_response),0
-        # except:
-        #     return 'error request'
+        tmp =  marshal(process_get_all_igd_category(request),SearchDto.search_all_igd_category_response)
+
+        if tmp == [] or tmp is None:
+            return tmp, 0
+        else:
+            return tmp, 200
 
 @search_ns.route("/get_all_R_tag")
 class get_all_R_tag(Resource):
@@ -107,6 +132,9 @@ class igd_search_recipe(Resource):
     def post(self):
         # try:
         # process_search_igd(request)
-        return marshal(process_igd_search_recipe(request), SearchDto.search_recipe_list_model_response), 0
-        # except:
-        #     return 'error request'
+        tmp =  marshal(process_igd_search_recipe(request), SearchDto.search_recipe_list_model_response)
+
+        if tmp == [] or tmp is None:
+            return tmp, 0
+        else:
+            return tmp, 200

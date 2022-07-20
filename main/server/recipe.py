@@ -27,18 +27,18 @@ def process_image_upload(request):
     response_data = {'image_id':image.id}
 
     resp = make_response(jsonify(response_data))
-    resp.status_code = 0
+    resp.status_code = 200
     return resp
 
 
 def process_image_get(request):
-    image_id =json.loads(request.data)['image_id']
+    image_id =json.loads(request.data)['image_get']
     image = Image.query.filter(Image.id ==image_id).first()
     # response_data = {'image': image.image}
     # print(image.image)
 
     resp = make_response(image.image)
-    resp.status_code = 0
+    resp.status_code = 200
     return resp
 
 
@@ -47,7 +47,7 @@ def process_UploadRecipe(request):
     user = TOKEN.validate_token(token)
     R_info = json.loads(request.data)
 
-    status_code = 0
+    status_code = 200
     R_dic = {"R_name": R_info['R_name'],
              "user_id": user.id,
              "R_description": R_info['R_description'],
@@ -103,7 +103,7 @@ def process_upload_igd(request):
     igd_info = json.loads(request.data)
 
     response_data = {"igd_name": igd_info['igd_name'], "message": "fail to upload！"}
-    status_code = 0
+    status_code = 200
     igd_dic = {
         "igd_name": igd_info['igd_name'],
         "igd_category": igd_info['igd_category'],
@@ -151,7 +151,7 @@ def process_upload_igd(request):
 # get
 def process_select_igd_v1(igd_info):
     response_data = {"igd_name": igd_info['igd_name'], "message": "success"}
-    status_code = 0
+    status_code = 200
 
     igd = Ingredient.query.filter_by(username=igd_info["igd_name"]).first()
     if igd is None:

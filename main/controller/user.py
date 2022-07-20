@@ -45,9 +45,9 @@ class userInfo(Resource):
     def get(self):
 
         try:
-            return marshal(process_userInfo_v1(request),UserDto.user_model),0
+            return marshal(process_userInfo_v1(request),UserDto.user_model),200
         except:
-            return 'user not login.'
+            return marshal(process_userInfo_v1(request),UserDto.user_model),0
 
 @user_ns.route("/login")
 class UserLogin(Resource):

@@ -21,7 +21,7 @@ def process_userInfo_v1(request):
 # get
 def process_login_v1(user_info):
     response_data = {"username": user_info['username'], "email": None, "id": None, "message": "success", "token": None}
-    status_code = 0
+    status_code = 200
     user = User.query.filter_by(username=user_info["username"]).first()
     if user is None:
         response_data['message'] = 'failed,username or password error!'
@@ -83,7 +83,7 @@ def password_invalid(password):
 # post
 def process_signup_v1(user_info):
     response_data = {"username": user_info['username'], "message": "fail to sign in！"}
-    status_code = 0
+    status_code = 200
     password_rule = re.compile(r'[0-9a-zA-Z_]{6,20}')
     if user_info['password1'] != user_info['password2']:
         response_data['message'] = 'The passwords are different！'
@@ -137,7 +137,7 @@ def process_forgetpassword_v1(request):
     # user = TOKEN.validate_token(token)
     user_info = json.loads(request.data)
     response_data = {"username":user_info["username"], "message": 'Information error'}
-    status_code = 0
+    status_code = 200
     user = User.query.filter_by(username=user_info["username"]).first()
 
     if user is None:
@@ -168,7 +168,7 @@ def process_changpassword_v1(request):
 
     user_info = json.loads(request.data)
     response_data = {"username": None, "new_password":None,"message": 'Information error'}
-    status_code = 0
+    status_code = 200
 
     # user = User.query.filter_by(username=user_id).first()
     response_data['username'] = user.username
@@ -189,7 +189,7 @@ def process_changpassword_v1(request):
             db.session.commit()
             response_data['message'] = f'success'
             response_data['new_password'] = user_info['new_password']
-            status_code = 0
+            status_code = 200
 
     else:
         response_data['message'] = 'failed, password error'
