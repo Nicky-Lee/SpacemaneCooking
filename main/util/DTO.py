@@ -202,3 +202,9 @@ class SearchDto():
 
     R_category_search_recipe_model =  search_ns.model("R_category_search_recipe_model",
                                                        {'R_category': fields.String})
+
+    search_fuzzy_igd_Recipe_model = search_ns.model("search_fuzzy_igd_Recipe",
+                                                    {
+                                                        "igd":fields.List,
+                                                        "Recipe":fields.String
+                                                    })

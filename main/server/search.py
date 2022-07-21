@@ -31,14 +31,31 @@ def process_select_recipe(request):
     return R,code
 
 
-def process_search_igd(request):
+def process_search_fuzzy_igd_Recipe(request):
     igd_info = json.loads(request.data)
     igd_name = "%{}%".format(igd_info['igd_name'])
+    dict = {"igd":None,"Recipe":None}
     igd = Ingredient.query.filter(Ingredient.igd_name.like(igd_name)).all()
+    R = Recipe.query.filter(Recipe.R_name.like(igd_name)).first()
     code = 400
     if igd:
         code = 200
-    return igd,code
+        igd_list = []
+        for i in igd:
+            igd_list.append(i.igd_name)
+        dict['igd'] = igd_list
+
+    if R:
+        code = 200
+        # R_list = []
+        # for i in R:
+        # R_list.append(R.R_name)
+        dict['Recipe'] = R.R_name
+
+    resp = make_response(jsonify(dict))
+    resp.status_code = code
+
+    return resp
 
 def process_R_category_search_recipe(request):
     code = 400

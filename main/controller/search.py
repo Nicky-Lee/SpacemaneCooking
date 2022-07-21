@@ -49,19 +49,19 @@ class select_recipe(Resource):
             return tmp, 400
 
 
-@search_ns.route("/search_igd")
-class Search_igd(Resource):
+@search_ns.route("/search_fuzzy_igd_Recipe")
+class search_fuzzy_igd_Recipe(Resource):
     @search_ns.expect(SearchDto.search_igd_model)
-    @search_ns.response(0, "success", SearchDto.search_igd_list_model)
+    @search_ns.response(0, "success", SearchDto.search_fuzzy_igd_Recipe_model)
     def post(self):
         # try:
-        tmp ,code = process_search_igd(request)
-
-        if code == 200:
-            return marshal(tmp, SearchDto.search_igd_list_model), 200
-
-        else:
-            return tmp, 400
+        # tmp ,code = process_search_fuzzy_igd_Recipe(request)
+        return process_search_fuzzy_igd_Recipe(request)
+        # if code == 200:
+        #     return marshal(tmp, SearchDto.search_fuzzy_igd_Recipe_model), 200
+        #
+        # else:
+        #     return tmp, 400
 
 
 @search_ns.route("/search_igd_list")
