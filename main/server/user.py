@@ -31,7 +31,7 @@ def process_login_v1(user_info):
         response_data['message'] = "failed,username or password error!"
         status_code = 400
 
-    if status_code == 0:
+    if status_code == 200:
         token = TOKEN.generate_token(user.id)
         response_data['token'] = token
         response_data['email'] = user.email

@@ -199,3 +199,6 @@ class SearchDto():
 
     search_all_R_category_response = search_ns.model("search_all_R_category_response",
                                                        {'R_category': fields.String})
+
+    R_category_search_recipe_model =  search_ns.model("R_category_search_recipe_model",
+                                                       {'R_category': fields.String})
