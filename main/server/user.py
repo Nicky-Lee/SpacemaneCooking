@@ -93,12 +93,13 @@ def process_signup_v1(user_info):
         response_data['message'] = 'The password is invalid！'
         status_code = 400
 
-    elif user_info['username'].isalpha():
+    elif not user_info['username'].isalpha():
         response_data['message'] = "The username isvalid ！！"
         status_code = 400
-    elif password_rule.fullmatch(user_info['password1']):
+    elif not password_rule.fullmatch(user_info['password1']):
         response_data['message'] = "The password isvalid ！！"
         status_code = 400
+        print(password_rule.fullmatch(user_info['password1']))
 
     elif len(user_info['username']) < 1 and len(user_info['username']) > 15:
         response_data['message'] = "The username isvalid ！！"
