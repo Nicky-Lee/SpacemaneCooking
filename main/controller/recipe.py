@@ -9,7 +9,14 @@ from ..util.decorator import token_required
 Recipe_ns = RecipeDto.Recipe_ns
 # /auth/login
 
-
+# @Recipe_ns.route("/Count_calories")
+# class Count_calories(Resource):
+#     # @Recipe_ns.expect(RecipeDto.Recipe_model_upload)
+#     @token_required
+#     def post(self):
+#         # try:
+#         #     print('1221')
+#             return process_Count_calories(request)
 
 @Recipe_ns.route("/image_upload")
 class image_upload(Resource):

@@ -8,9 +8,50 @@ from ..util.token import TOKEN
 from collections import defaultdict
 from ..model.Recipe import Recipe
 
+def process_click_igd_fuzzy(request):
+    igd_name_list = json.loads(request.data)['igd_name_list'].split(',')
+    code =400
+    R_dict = {"R_name":None,"idg_content":[]}
+    dict = {"igd_recommend_lsit": None, "Recipe_recommend_list": []}
+
+    igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_name_list)).all()
+    R_id_dict = defaultdict(int)
+    for igd in igd_list:
+        tmp_R_list = igd.Recipe
+        for R in tmp_R_list:
+            R_id_dict[R] += 1
+
+    R_list = sorted(R_id_dict.items(), key=lambda x: x[1], reverse=True)
+    R_list = [x for x, y in R_list]
+
+
+    igd_id_dict= defaultdict(int)
+    for R in R_list:
+        R_dict['R_name'] = R.R_name
+        tmp_igd_list = R.Ingredient
+        R_dict['idg_content'] =[]
+        for igd in tmp_igd_list:
+            R_dict['idg_content'].append(igd.igd_name)
+            if igd.igd_name not in igd_name_list:
+                igd_id_dict[igd.igd_name] +=1
+        if len(dict['Recipe_recommend_list'])<=5:
+            dict['Recipe_recommend_list'].append(R_dict)
+    igd_list = sorted(igd_id_dict.items(), key=lambda x: x[1], reverse=True)
+    igd_list = [x for x, y in igd_list][:5]
+
+    dict['igd_recommend_lsit']=igd_list
+    if R_list and igd_list:
+        code = 200
+
+    resp = make_response(jsonify(dict))
+    resp.status_code = code
+    return resp
+
+
 def process_user_recipe(request):
     token = request.headers.get("token")
     user = TOKEN.validate_token(token)
+
     R = Recipe.query.filter(Recipe.user_id == user.id).all()
     code =400
     if R:
@@ -59,9 +100,14 @@ def process_search_fuzzy_igd_Recipe(request):
 
 def process_R_category_search_recipe(request):
     code = 400
-    R_category = json.loads(request.data)['R_category']
-    R_list = Recipe.query.filter(Recipe.R_category == R_category).all()
+    R_category = json.loads(request.data)['R_category'].split(',')
+    for index,item in enumerate(R_category):
+        R_category[index] ="%"+R_category[index]+"%"
 
+    rule = or_(*[Recipe.R_category.like(w) for w in R_category])
+    print(R_category)
+    R_list = Recipe.query.filter(rule).all()
+    print(R_category)
     if R_list:
         code = 200
     return R_list,code
@@ -166,10 +212,14 @@ def process_get_all_R_tag(request):
     # print(IGD_category.query(IGD_category.igd_category_name).all())
     all_R_tag_list = []
     all_R_tag = Recipe.query.filter(Recipe.R_category != '').all()
-    for tag in all_R_tag:
-        for each_tag in tag.R_category.split(','):
+    # print(len(all_R_tag),all_R_tag)
+    for R in all_R_tag:
+        # print(R.R_category.split(','))
+        for each_tag in R.R_category.split(','):
             if each_tag != '' and each_tag not in all_R_tag_list:
+
                 all_R_tag_list.append(each_tag)
+        # print(all_R_tag_list)
             # print(each_tag)
     response_data = {"all_R_tag": all_R_tag_list}
 

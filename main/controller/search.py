@@ -21,6 +21,12 @@ class user_recipe(Resource):
         else:
             return tmp, 200
 
+@search_ns.route("/click_igd_fuzzy")
+class click_igd_fuzzy(Resource):
+    # @search_ns.expect(SearchDto.search_recipe_model)
+    def post(self):
+        return process_click_igd_fuzzy(request)
+
 
 @search_ns.route("/initial_recommend")
 class initial_recommend(Resource):

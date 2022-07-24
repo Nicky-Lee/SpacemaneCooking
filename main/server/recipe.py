@@ -15,19 +15,33 @@ import random
 5:else
 }"""
 
+# def process_Count_calories(request):
+#     data = json.loads(request.data)['image_get']
+#     igd_num_dict = {}
+#     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_num_dict.keys())).all()
+#     resp = make_response(jsonify(response_data))
+#     resp.status_code = 200
+#     return
+
 
 def process_image_upload(request):
     # print(1)
     data = request.files['file']
     # print(data)
-    image = Image(data.read())
-    db.session.add(image)
-    db.session.commit()
-    # print(image)
-    response_data = {'image_id':image.id}
+
+    try:
+        image = Image(data.read())
+        db.session.add(image)
+        db.session.commit()
+        # print(image)
+        response_data = {'image_id':image.id}
+        code =200
+    except:
+        response_data={}
+        code =400
 
     resp = make_response(jsonify(response_data))
-    resp.status_code = 200
+    resp.status_code = code
     return resp
 
 
@@ -36,9 +50,14 @@ def process_image_get(request):
     image = Image.query.filter(Image.id ==image_id).first()
     # response_data = {'image': image.image}
     # print(image.image)
+    if image:
+        resp = make_response(image.image)
+        code =200
+    else:
+        resp = make_response(None)
+        code = 400
+    resp.status_code = code
 
-    resp = make_response(image.image)
-    resp.status_code = 200
     return resp
 
 
