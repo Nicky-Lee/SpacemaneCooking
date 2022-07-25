@@ -3,7 +3,8 @@ from .. import db
 
 recipe_ingredient = db.Table('recipe_ingredient',
                              db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id'), primary_key=True),
-                             db.Column('igd_id', db.Integer, db.ForeignKey('ingredient.id'), primary_key=True)
+                             db.Column('igd_id', db.Integer, db.ForeignKey('ingredient.id'), primary_key=True),
+
                              )
 
 
@@ -40,12 +41,13 @@ class Recipe(db.Model):
     R_calorie = db.Column(db.Integer, nullable=True)
     image_id = db.Column(db.Integer)
     Ingredient_content = db.Column(db.String(240), nullable=True)
+    Ingredient_g_content =  db.Column(db.String(240), nullable=True)
     # igd_id = db.Column(db.Integer, db.ForeignKey('ingredient.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    Ingredient = db.relationship('Ingredient', secondary=recipe_ingredient)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id') )
+    Ingredient = db.relationship('Ingredient', secondary=recipe_ingredient,backref=db.backref('recipe'),passive_deletes=True)
     click = db.Column(db.Integer)
 
-    def __init__(self, R_name, user_id, R_description=None, R_category=None, R_calorie=0, image_id=None,Ingredient_content=None,click=0):
+    def __init__(self, R_name, user_id, R_description=None, R_category=None, R_calorie=0, image_id=None,Ingredient_content=None,click=0,Ingredient_g_content=None):
         self.R_name = R_name
         self.R_description = R_description
         self.R_category = R_category
@@ -54,6 +56,7 @@ class Recipe(db.Model):
         self.image_id = image_id
         self.Ingredient_content=Ingredient_content
         self.click=click
+        self.Ingredient_g_content=Ingredient_g_content
 
     def __repr__(self):
         return '<Recipe %r>' % self.R_name
@@ -68,7 +71,7 @@ class IGD_category(db.Model):
     __tablename__ = 'igd_category'
     id = db.Column(db.Integer, primary_key=True)
     igd_category_name = db.Column(db.String(30), unique=True, nullable=False)
-    Ingredient = db.relationship('Ingredient', secondary=tags)
+    Ingredient = db.relationship('Ingredient', secondary=tags )
 
     def __init__(self, igd_category_name):
         self.igd_category_name = igd_category_name
@@ -84,7 +87,7 @@ class Ingredient(db.Model):
     igd_opponent = db.Column(db.String(80))
     igd_calorie = db.Column(db.Integer, nullable=True)
     # image_id = db.Column(db.Integer)
-    Recipe = db.relationship('Recipe', secondary=recipe_ingredient)
+    Recipe = db.relationship('Recipe', secondary=recipe_ingredient,backref=db.backref('ingredient') ,passive_deletes=True)
 
     # student_id=db.Column(db.Integer,db.ForeignKey('student.id'))
     def __init__(self, igd_name, igd_category=None, igd_opponent=None, igb_description=None, igd_calorie=0,

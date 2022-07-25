@@ -92,10 +92,11 @@ class RecipeDto():
     search_list_Recipe_model = Recipe_ns.model("search_list_Recipe_model",
                                                {
                                                    "R_name": fields.String,
+                                                   "id": fields.String,
                                                    "R_category": fields.String,
                                                    "R_calorie": fields.String,
                                                    "image_id": fields.String,
-                                                   'Ingredient_content': fields.String,
+                                                   'Ingredient_g_content': fields.String,
                                                    'click': fields.Integer
                                                })
     Ingredient_model = Recipe_ns.model("Ingredient_model",
@@ -158,7 +159,7 @@ class SearchDto():
                                                   "R_calorie": fields.String,
                                                   "image_id": fields.String,
                                                   "user_id": fields.Integer,
-                                                  "Ingredient_content": fields.String,
+                                                  "Ingredient_g_content": fields.String,
                                                   "click":fields.Integer
                                               })
 

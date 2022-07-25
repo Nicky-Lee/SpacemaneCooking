@@ -58,7 +58,7 @@ if __name__ == '__main__':
     #                      IGD_category("Other types"), IGD_category("Cereal")]
     # db.session.add_all(IGD_category_list)
     # IGB_list = []
-    # igb_df = pd.read_excel('/Users/lixiaoke19/Documents/9900/main/SpacemaneCooking/database_message.xlsx',sheet_name='Sheet2')
+    # igb_df = pd.read_excel(r'E:\we_content\WeChat Files\wxid_7316523165111\FileStorage\File\2022-07\main(1)\main\SpacemaneCooking\database_message.xlsx',sheet_name='Sheet2')
     # """
     # Ingredient(igd_name=igd_dic['igd_name'],
     #                      igd_category=igd_dic["igd_category"],
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     #     igd_name = igb_df.iloc[index, 0]
     #     igd_category = igb_df.iloc[index, 1]
     #     igd_opponent = igb_df.iloc[index, 2]
-    #     igd_calorie = igb_df.iloc[index, 3]
+    #     igd_calorie = int(igb_df.iloc[index, 3])
     #     tmp = Ingredient(igd_name=igd_name,
     #                      igd_category=igd_category,
     #                      igd_opponent=igd_opponent,
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     #     db.session.add(igd_ca)
     #     db.session.commit()
     #
-    # R_list = pd.read_excel('/Users/lixiaoke19/Documents/9900/main/SpacemaneCooking/database_message.xlsx', sheet_name='Sheet1')
+    # R_list = pd.read_excel(r'E:\we_content\WeChat Files\wxid_7316523165111\FileStorage\File\2022-07\main(1)\main\SpacemaneCooking\database_message.xlsx', sheet_name='Sheet1')
     # """
     # Rec = Recipe(R_name=R_dic['R_name'],
     #                  R_category=R_dic["R_category"],

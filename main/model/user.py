@@ -16,7 +16,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True,nullable=True)
-    Recipe_id = db.relationship("Recipe", backref="user")
+    Recipe_id = db.relationship("Recipe", backref="user",cascade='all, delete-orphan' , passive_deletes = True)
 
     def __init__(self, username, password, email=None):
         self.username = username

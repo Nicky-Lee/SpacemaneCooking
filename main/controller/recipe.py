@@ -27,6 +27,15 @@ class image_upload(Resource):
         #     print('1221')
             return process_image_upload(request)
 
+@Recipe_ns.route("/change_Recipe")
+class change_Recipe(Resource):
+    # @Recipe_ns.expect(RecipeDto.Recipe_model_upload)
+    @token_required
+    def post(self):
+        # try:
+        #     print('1221')
+            return process_change_Recipe(request)
+
 
 @Recipe_ns.route("/image_get")
 class image_get(Resource):
