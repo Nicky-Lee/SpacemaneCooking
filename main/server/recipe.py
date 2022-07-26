@@ -54,10 +54,11 @@ def process_change_Recipe(request):
              "image_id": R_info['image_id'],
              "igd_list": R_info['igd_list'],
              "message": "fail to upload！"}
-    igd_list = R_info["igd_list"].split(',')
+    igd_g_list = R_info['igd_list']
+    R_calorie, Ingredient_content = Calorie_counting(igd_g_list)
     # print(igd_list)
-    igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_list)).all()
-    # print(igd_list)
+    igd_list_search = Ingredient_content.split(',')
+    igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_list_search)).all()
 
     Rec = Recipe.query.filter_by(id=R_info['R_id']).first()
     if igd_list == []:
@@ -65,15 +66,12 @@ def process_change_Recipe(request):
         R_dic['message'] = f"Ingredient not exist!!"
     elif Rec:
         if Rec.user_id == user.id:
-            # if R_dic['R_category'] not in ['breakfast','lunch','dinner','dessert']:
-            #     R_dic['R_category'] = 'else'
+
             db.session.delete(Rec)
             db.session.commit()
 
             click = Rec.click
-            igd_g_list = R_dic['igd_list']
 
-            R_calorie, Ingredient_content = Calorie_counting(igd_g_list)
             new_Rec = Recipe(R_name=R_dic['R_name'],
                              R_category=R_dic["R_category"],
                              user_id=user.id,
@@ -168,10 +166,14 @@ def process_UploadRecipe(request):
              "image_id": R_info['image_id'],
              "igd_list": R_info['igd_list'],
              "message": "fail to upload！"}
-    igd_list = R_info["igd_list"].split(',')
+    igd_g_list = R_info['igd_list']
+    R_calorie, Ingredient_content = Calorie_counting(igd_g_list)
     # print(igd_list)
-    igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_list)).all()
+    igd_list_search = Ingredient_content.split(',')
+    igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_list_search)).all()
     # print(igd_list)
+
+
 
     Rec = Recipe.query.filter_by(R_name=R_info['R_name']).first()
     if igd_list == []:
@@ -179,9 +181,6 @@ def process_UploadRecipe(request):
         status_code = 400
     elif Rec is None and igd_list != []:
 
-        igd_g_list = R_info['igd_list']
-
-        R_calorie, Ingredient_content = Calorie_counting(igd_g_list)
         Rec = Recipe(R_name=R_dic['R_name'],
                      R_category=R_dic["R_category"],
                      user_id=R_dic['user_id'],
@@ -191,6 +190,7 @@ def process_UploadRecipe(request):
                      Ingredient_g_content=R_info['igd_list'],
                      Ingredient_content=Ingredient_content,
                      click=random.randint(1, 100))
+
         for igd in igd_list:
             igd.Recipe.append(Rec)
             db.session.add(igd)

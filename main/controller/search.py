@@ -33,11 +33,11 @@ class initial_recommend(Resource):
     # @search_ns.expect(SearchDto.search_recipe_model)
     @search_ns.response(0, "success", SearchDto.search_recipe_list_model_response)
     def post(self):
-        tmp = marshal(process_initial_recommend(), SearchDto.search_recipe_list_model_response)
-        if tmp == [] or tmp is None:
-            return tmp, 0
+        tmp,code = process_initial_recommend()
+        if code == 200:
+            return marshal(tmp, SearchDto.search_recipe_list_model_response)
         else:
-            return tmp, 200
+            return tmp, 400
 
 
 @search_ns.route("/select_recipe")

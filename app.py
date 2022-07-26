@@ -94,25 +94,46 @@ if __name__ == '__main__':
     #                  Ingredient_content = R_info['igd_list'],
     #                  click = random.randint(1,100))
     #                      """
+    #
+    #
+    # def Calorie_counting(igd_g_list):
+    #     igd_g_list = igd_g_list.split(';')
+    #     c_res = 0
+    #     Ingredient_conten = ''
+    #     for tmp in igd_g_list:
+    #         igd, num = tmp.split(',')
+    #         igd = Ingredient.query.filter(Ingredient.igd_name == igd).first()
+    #         if igd:
+    #             Ingredient_conten += igd.igd_name + ','
+    #             c_res += igd.igd_calorie * int(num) * 0.01
+    #
+    #     return int(c_res), Ingredient_conten
+    #
     # for index in R_list.index:
     #     R_name = R_list.iloc[index, 0]
     #     R_description = R_list.iloc[index, 1]
     #     R_category = R_list.iloc[index, 2]
-    #     igd_calorie = int(R_list.iloc[index, 3])
-    #     Ingredient_content= R_list.iloc[index, 4]
+    #     Ingredient_g_content= R_list.iloc[index, 4]
+    #
+    #
+    #
+    #     R_calorie, Ingredient_content = Calorie_counting(Ingredient_g_content)
+    #     # print(igd_list)
+    #     igd_list_search = Ingredient_content.split(',')
+    #     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_list_search)).all()
+    #
     #     Rec = Recipe(R_name=R_name,
     #                  R_category=R_category,
     #                  user_id=1,
     #                  R_description=R_description,
-    #                  R_calorie=igd_calorie,
+    #                  R_calorie=R_calorie,
     #                  image_id=index+1,
+    #                  Ingredient_g_content=Ingredient_g_content,
     #                  Ingredient_content=Ingredient_content,
     #                  click=random.randint(1, 100))
     #     db.session.add(Rec)
     #     db.session.commit()
     #
-    #     igd_list = Ingredient_content.split(',')
-    #     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_list)).all()
     #     for igd in igd_list:
     #         igd.Recipe.append(Rec)
     #         db.session.add(igd)
