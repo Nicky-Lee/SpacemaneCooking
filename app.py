@@ -6,6 +6,8 @@ from main.model.user import *
 from main.api import blueprint
 import pandas as pd
 import random
+import sys
+
 app = app
 app.register_blueprint(blueprint)
 
@@ -46,21 +48,22 @@ app.register_blueprint(blueprint)
 
 
 if __name__ == '__main__':
+
+    if len(sys.argv) >= 2:
+        mark = sys.argv[1]
+    else:
+        mark = 'run'
+
     if mark == 'init':
         db.drop_all()
         db.create_all()
-        IGD_category_list = [IGD_category('Tubers'), IGD_category("Melon and Fruits"), IGD_category("Stems"),
-                             IGD_category("Aquatic product"),
-                             IGD_category("Eggs"), IGD_category("Chicken"), IGD_category("Beef"), IGD_category("Pork"),
-                             IGD_category("Mutton"), IGD_category("Flour and rice product"), IGD_category("Mushrooms"),
-                             IGD_category("Onion garlic"),
-                             IGD_category("Bean products"), IGD_category("Beans"), IGD_category("Dairy product"),
-                             IGD_category("Condiments"),
-                             IGD_category("Other types"), IGD_category("Cereal")]
+        IGD_category_list = [IGD_category('vegetables'), IGD_category("meat"), IGD_category("mushrooms"),
+                             IGD_category("beans and bean products"), IGD_category("aquatic products"),
+                             IGD_category("eggs"), IGD_category("fruits"), IGD_category("dairy products"),
+                             IGD_category("cereal"), IGD_category("condiments"), IGD_category("other types")]
         db.session.add_all(IGD_category_list)
         IGB_list = []
-        igb_df = pd.read_excel(r'E:\we_content\WeChat Files\wxid_7316523165111\FileStorage\File\2022-07\main(1)\main\SpacemaneCooking\database_message.xlsx',sheet_name='Sheet2')
-
+        igb_df = pd.read_excel('database_igd.xlsx')
         """
         Ingredient(igd_name=igd_dic['igd_name'],
                              igd_category=igd_dic["igd_category"],
@@ -69,10 +72,11 @@ if __name__ == '__main__':
                              image_id=igd_dic['image_id'])
         """
         for index in igb_df.index:
-            igd_name = igb_df.iloc[index, 0]
-            igd_category = igb_df.iloc[index, 1]
-            igd_opponent = igb_df.iloc[index, 2]
-            igd_calorie = int(igb_df.iloc[index, 3])
+            igd_category = igb_df.iloc[index, 0]
+            igd_name = igb_df.iloc[index, 1].lower()
+
+            igd_calorie = int(igb_df.iloc[index, 2])
+            igd_opponent = igb_df.iloc[index, 3]
             tmp = Ingredient(igd_name=igd_name,
                              igd_category=igd_category,
                              igd_opponent=igd_opponent,
@@ -85,7 +89,7 @@ if __name__ == '__main__':
             db.session.add(igd_ca)
             db.session.commit()
 
-        R_list = pd.read_excel(r'E:\we_content\WeChat Files\wxid_7316523165111\FileStorage\File\2022-07\main(1)\main\SpacemaneCooking\database_message.xlsx', sheet_name='Sheet1')
+        R_list = pd.read_excel(r'database_recipe.xlsx')
         """
         Rec = Recipe(R_name=R_dic['R_name'],
                          R_category=R_dic["R_category"],
@@ -96,24 +100,32 @@ if __name__ == '__main__':
                          Ingredient_content = R_info['igd_list'],
                          click = random.randint(1,100))
         """
+
+
         def Calorie_counting(igd_g_list):
             igd_g_list = igd_g_list.split(';')
             c_res = 0
             Ingredient_conten = ''
+
             for tmp in igd_g_list:
-                igd, num = tmp.split(',')
-                igd = Ingredient.query.filter(Ingredient.igd_name == igd).first()
-                if igd:
-                    Ingredient_conten += igd.igd_name + ','
-                    c_res += igd.igd_calorie * int(num) * 0.01
+                try:
+                    igd, num = tmp.split(',')
+                    igd = Ingredient.query.filter(Ingredient.igd_name == igd.lower()).first()
+                    if igd:
+                        Ingredient_conten += igd.igd_name + ','
+                        c_res += igd.igd_calorie * int(num) * 0.01
+                except:
+                    print(tmp)
 
             return int(c_res), Ingredient_conten[:-1]
 
+
         for index in R_list.index:
-            R_name = R_list.iloc[index, 0]
-            R_description = R_list.iloc[index, 1]
-            R_category = R_list.iloc[index, 2]
-            Ingredient_g_content= R_list.iloc[index, 4]
+            R_name = R_list.iloc[index, 1]
+            Ingredient_g_content = R_list.iloc[index, 2].lower()
+            R_description = R_list.iloc[index, 3]
+            R_category = R_list.iloc[index, 4]
+            image_url = R_list.iloc[index, 5]
 
 
 
@@ -124,10 +136,10 @@ if __name__ == '__main__':
 
             Rec = Recipe(R_name=R_name,
                          R_category=R_category,
-                         user_id=1,
+                         user_id=random.randint(1, 6),
                          R_description=R_description,
                          R_calorie=R_calorie,
-                         image_url=f"image_url/{index+1}.png",
+                         image_url=image_url,
                          Ingredient_g_content=Ingredient_g_content,
                          Ingredient_content=Ingredient_content,
                          click=random.randint(1, 100))
@@ -142,5 +154,5 @@ if __name__ == '__main__':
             db.session.commit()
     else:
         pass
-
+    # print(111)
     app.run()

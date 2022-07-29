@@ -50,3 +50,14 @@ class UserInf(db.Model):
         self.hobby = hobby
         self.occupation = occupation
         self.nation = nation
+
+
+class Search(db.Model):
+    __tablename__ = 'search'
+    id = db.Column(db.Integer, primary_key=True)
+    search = db.Column(db.String(80), nullable=True)
+    time = db.Column(db.Integer, nullable=True)
+
+    def __init__(self, search=None, time=0 ):
+        self.search = search
+        self.time = time

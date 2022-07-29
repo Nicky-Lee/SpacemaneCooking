@@ -8,6 +8,18 @@ from ..util.decorator import token_optional, token_required
 search_ns = SearchDto.search_ns
 
 
+@search_ns.route("/healthy_recipe")
+class healthy_recipe(Resource):
+    # @search_ns.expect(SearchDto.search_recipe_model)
+
+    @search_ns.response(0, "success", SearchDto.search_recipe_list_model_response)
+    def post(self):
+        tmp ,code= process_healthy_recipe(request)
+        if code ==200 :
+            return marshal(tmp, SearchDto.search_recipe_list_model_response), 200
+        else:
+            return tmp, 400
+
 @search_ns.route("/user_recipe")
 class user_recipe(Resource):
     # @search_ns.expect(SearchDto.search_recipe_model)

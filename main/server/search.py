@@ -9,7 +9,7 @@ from collections import defaultdict
 from ..model.Recipe import Recipe
 
 def process_click_igd_fuzzy(request):
-    igd_name_list = json.loads(request.data)['igd_name_list'].split(',')
+    igd_name_list = json.loads(request.data)['igd_name_list'].lower().split(',')
     code =400
     R_dict = {"R_name":None,"idg_content":[]}
     dict = {"igd_recommend_lsit": None, "Recipe_recommend_list": []}
@@ -60,7 +60,7 @@ def process_user_recipe(request):
 
 
 def process_select_recipe(request):
-    R_name = json.loads(request.data)['R_name']
+    R_name = json.loads(request.data)['R_name'].lower()
     R = Recipe.query.filter(Recipe.R_name == R_name).first()
     code =400
     if R:
@@ -74,7 +74,7 @@ def process_select_recipe(request):
 
 def process_search_fuzzy_igd_Recipe(request):
     igd_info = json.loads(request.data)
-    igd_name = "%{}%".format(igd_info['igd_name'])
+    igd_name = "%{}%".format(igd_info['igd_name'].lower())
     dict = {"igd":None,"Recipe":None}
     igd = Ingredient.query.filter(Ingredient.igd_name.like(igd_name)).all()
     R = Recipe.query.filter(Recipe.R_name.like(igd_name)).first()
@@ -114,7 +114,7 @@ def process_R_category_search_recipe(request):
 
 def process_search_igd_list(request):
     igd_info = json.loads(request.data)
-    igd_name_list = igd_info['igd_name'].split(',')
+    igd_name_list = igd_info['igd_name'].lower().split(',')
 
     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_name_list)).all()
     code = 400
@@ -126,7 +126,7 @@ def process_search_igd_list(request):
 def process_Search_recipe(request):
     code = 400
     igd_info = json.loads(request.data)
-    igd_name_list = igd_info['igd_name'].split(',')
+    igd_name_list = igd_info['igd_name'].lower().split(',')
     R_category = igd_info['R_category'].split(',')
     # if R_category is None:
     #     R_category = ['breakfast', 'lunch', 'dinner', 'dessert', 'else']
@@ -149,7 +149,7 @@ def process_Search_recipe(request):
 
 def process_igd_search_recipe(request):
     igd_info = json.loads(request.data)
-    igd_name_list = igd_info['igd_name'].split(',')
+    igd_name_list = igd_info['igd_name'].lower().split(',')
     code = 400
     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_name_list)).all()
 
@@ -221,3 +221,18 @@ def process_get_all_R_tag(request):
     resp = make_response(jsonify(response_data))
     resp.status_code = status_code
     return resp
+
+def process_healthy_recipe(request):
+    code = 400
+    R_list = Recipe.query.filter(Recipe.R_name != '').all()
+    R_list_dict = defaultdict(int)
+    # print(R_list)
+    for R in R_list:
+        Recipe_cal = R.R_calorie
+        R_list_dict[R] = Recipe_cal
+    response_sorted = sorted(R_list_dict.items(), key=lambda x: x[1], reverse=False)
+    response_sorted = [x for x, y in response_sorted]
+
+    if R_list:
+        code = 200
+    return response_sorted,code
