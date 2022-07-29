@@ -1,4 +1,4 @@
-from ..model.user import User, UserInf
+from ..model.user import User, UserInf,Search
 from ..model.Recipe import Recipe, Ingredient, IGD_category
 from flask import make_response, jsonify
 from .. import *
@@ -158,7 +158,21 @@ def process_igd_search_recipe(request):
         R_list = igd.Recipe
         for R in R_list:
             R_id_dict[R] += 1
+    for key,value in R_id_dict:
+        R_id_dict[key] = value/len(key.Ingredient)
+    print(R_id_dict)
     response_sorted = sorted(R_id_dict.items(), key=lambda x: x[1], reverse=True)
+    if response_sorted[0][1]<1:
+        check = Search.query.filter(Search.search == igd_name_list).first()
+        if check:
+            check.time +=1
+            db.session.add(check)
+            db.session.commit()
+        else:
+            new_Search = Search(search = igd_name_list,time = 1)
+            db.session.add(new_Search)
+            db.session.commit()
+
     response_sorted = [x for x, y in response_sorted]
 
     if R_id_dict:
@@ -183,7 +197,7 @@ def process_initial_recommend():
 
 def process_search_category_igd(request):
     igd_info = json.loads(request.data)
-    igb_category = igd_info['igd_category']
+    igb_category = igd_info['igd_category'].lower()
     code = 400
     if igb_category is None:
         return None

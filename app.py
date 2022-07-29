@@ -154,5 +154,5 @@ if __name__ == '__main__':
             db.session.commit()
     else:
         pass
-    # print(111)
+
     app.run()
