@@ -23,7 +23,7 @@ app.config['MAIL_DEFAULT_SENDER'] = 'SpaceManCooking@126.com'
 IMAGE_PATH = os.getcwd()+"/image_lib/"
 
 db.init_app(app)
-print("image url:",IMAGE_PATH)
+# print("image url:",IMAGE_PATH)
 mail =Mail(app)
 
 #
