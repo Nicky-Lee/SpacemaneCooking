@@ -39,7 +39,7 @@ class Recipe(db.Model):
     R_description = db.Column(db.String(240), nullable=True)
     R_category = db.Column(db.String(20), nullable=True)
     R_calorie = db.Column(db.Integer, nullable=True)
-    image_id = db.Column(db.Integer)
+    image_url = db.Column(db.String)
     Ingredient_content = db.Column(db.String(240), nullable=True)
     Ingredient_g_content =  db.Column(db.String(240), nullable=True)
     # igd_id = db.Column(db.Integer, db.ForeignKey('ingredient.id'))
@@ -47,13 +47,13 @@ class Recipe(db.Model):
     Ingredient = db.relationship('Ingredient', secondary=recipe_ingredient,backref=db.backref('recipe'),passive_deletes=True)
     click = db.Column(db.Integer)
 
-    def __init__(self, R_name, user_id, R_description=None, R_category=None, R_calorie=0, image_id=None,Ingredient_content=None,click=0,Ingredient_g_content=None):
+    def __init__(self, R_name, user_id, R_description=None, R_category=None, R_calorie=0, image_url=None,Ingredient_content=None,click=0,Ingredient_g_content=None):
         self.R_name = R_name
         self.R_description = R_description
         self.R_category = R_category
         self.R_calorie = R_calorie
         self.user_id = user_id
-        self.image_id = image_id
+        self.image_url = image_url
         self.Ingredient_content=Ingredient_content
         self.click=click
         self.Ingredient_g_content=Ingredient_g_content

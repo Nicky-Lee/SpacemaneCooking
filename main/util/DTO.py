@@ -74,7 +74,7 @@ class RecipeDto():
                                               "R_description": fields.String,
                                               "R_category": fields.String,
                                               "R_calorie": fields.String,
-                                              "image_id": fields.String,
+                                              "image_url": fields.String,
                                               "user_id": fields.Integer,
                                               "igd_list": fields.String
                                           })
@@ -85,7 +85,7 @@ class RecipeDto():
                                        "R_description": fields.String,
                                        "R_category": fields.String,
                                        "R_calorie": fields.String,
-                                       "image_id": fields.String,
+                                       "image_url": fields.String,
                                        "user_id": fields.Integer,
                                        "id": fields.Integer
                                    })
@@ -95,8 +95,8 @@ class RecipeDto():
                                                    "id": fields.String,
                                                    "R_category": fields.String,
                                                    "R_calorie": fields.String,
-                                                   "image_id": fields.String,
-                                                   'Ingredient_g_content': fields.String,
+                                                   "image_url": fields.String,
+                                                   'Ingredient_content': fields.String,
                                                    'click': fields.Integer
                                                })
     Ingredient_model = Recipe_ns.model("Ingredient_model",
@@ -106,7 +106,7 @@ class RecipeDto():
                                            "igd_calorie": fields.Integer,
                                            "igd_opponent": fields.String,
                                            "igb_description": fields.String,
-                                           "image_id": fields.String,
+                                           # "image_id": fields.String,
                                            "id": fields.Integer
                                        })
     Ingredient_model_upload = Recipe_ns.model("Ingredient_model_upload",
@@ -115,7 +115,7 @@ class RecipeDto():
                                                   "igd_category": fields.String,
                                                   "igd_calorie": fields.Integer,
                                                   "igd_opponent": fields.String,
-                                                  "image_id": fields.String,
+                                                  # "image_url": fields.String,
                                                   "id": fields.Integer
                                               })
 
@@ -157,7 +157,7 @@ class SearchDto():
                                                   "R_description": fields.String,
                                                   "R_category": fields.String,
                                                   "R_calorie": fields.String,
-                                                  "image_id": fields.String,
+                                                  "image_url": fields.String,
                                                   "user_id": fields.Integer,
                                                   "Ingredient_g_content": fields.String,
                                                   "click":fields.Integer

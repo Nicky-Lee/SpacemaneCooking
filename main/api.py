@@ -1,4 +1,6 @@
 from flask import Blueprint
+import flask.scaffold
+flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restplus import Api, Resource
 from .util.DTO import UserDto, RecipeDto
 from .controller.user import user_ns

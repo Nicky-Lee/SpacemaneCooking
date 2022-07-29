@@ -15,11 +15,11 @@ class user_recipe(Resource):
     @search_ns.response(0, "success", SearchDto.search_recipe_list_model_response)
     @token_required
     def post(self):
-        tmp = marshal(process_user_recipe(request), SearchDto.search_recipe_list_model_response)
-        if tmp == [] or tmp is None:
-            return tmp, 0
+        tmp ,code= process_user_recipe(request)
+        if code ==200 :
+            return marshal(tmp, SearchDto.search_recipe_list_model_response), 200
         else:
-            return tmp, 200
+            return tmp, 400
 
 @search_ns.route("/click_igd_fuzzy")
 class click_igd_fuzzy(Resource):

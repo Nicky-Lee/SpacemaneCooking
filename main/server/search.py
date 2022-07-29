@@ -105,9 +105,9 @@ def process_R_category_search_recipe(request):
         R_category[index] ="%"+R_category[index]+"%"
 
     rule = or_(*[Recipe.R_category.like(w) for w in R_category])
-    print(R_category)
+
     R_list = Recipe.query.filter(rule).all()
-    print(R_category)
+
     if R_list:
         code = 200
     return R_list,code
@@ -189,18 +189,15 @@ def process_search_category_igd(request):
         return None
 
     igd_list = IGD_category.query.filter(IGD_category.igd_category_name == igb_category).first()
-    # print(igd_list)
-    # print(igd_list)
+
     if igd_list:
         igd_list= igd_list.Ingredient
-    # print(igd_list)
         code = 200
 
     return igd_list,code
 
 
 def process_get_all_igd_category(request):
-    # print(IGD_category.query(IGD_category.igd_category_name).all())
     all_igd_category = IGD_category.query.filter(IGD_category.igd_category_name != '').all()
     code = 400
     if all_igd_category:
@@ -209,18 +206,14 @@ def process_get_all_igd_category(request):
 
 
 def process_get_all_R_tag(request):
-    # print(IGD_category.query(IGD_category.igd_category_name).all())
     all_R_tag_list = []
     all_R_tag = Recipe.query.filter(Recipe.R_category != '').all()
-    # print(len(all_R_tag),all_R_tag)
     for R in all_R_tag:
-        # print(R.R_category.split(','))
         for each_tag in R.R_category.split(','):
             if each_tag != '' and each_tag not in all_R_tag_list:
 
                 all_R_tag_list.append(each_tag)
-        # print(all_R_tag_list)
-            # print(each_tag)
+
     response_data = {"all_R_tag": all_R_tag_list}
 
     status_code = 200
