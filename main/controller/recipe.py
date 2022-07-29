@@ -18,6 +18,16 @@ Recipe_ns = RecipeDto.Recipe_ns
 #         #     print('1221')
 #             return process_Count_calories(request)
 
+
+@Recipe_ns.route("/lack_igd_list_recommend")
+class image_upload(Resource):
+    # @Recipe_ns.expect(RecipeDto.Recipe_model_upload)
+    @token_required
+    def post(self):
+        # try:
+        #     print('1221')
+            return process_lack_igd_list_recommend(request)
+
 @Recipe_ns.route("/image_upload")
 class image_upload(Resource):
     # @Recipe_ns.expect(RecipeDto.Recipe_model_upload)

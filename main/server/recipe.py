@@ -1,4 +1,4 @@
-from ..model.user import User, UserInf
+from ..model.user import User, UserInf, Search
 from ..model.Recipe import Recipe, Ingredient, IGD_category, Image
 from flask import make_response, jsonify
 from .. import *
@@ -7,6 +7,7 @@ import json
 from ..util.token import TOKEN
 import random
 from .. import IMAGE_PATH
+from collections import defaultdict
 
 """R_category_num={
 
@@ -25,6 +26,26 @@ from .. import IMAGE_PATH
 #     resp = make_response(jsonify(response_data))
 #     resp.status_code = 200
 #     return
+def process_lack_igd_list_recommend(request):
+    response_data = {"igd_list1": [], "igd_list2": [], "igd_list3": [], "igd_list4": [], }
+    status_code = 400
+
+    igd_list = Search.query.filter(Search.search != '').limit(10)
+    igd_list_dict = defaultdict(float)
+    for igdList in igd_list:
+        igd_list_dict[igdList.search] = igdList.time
+    R_list_out = sorted(igd_list_dict.items(), key=lambda x: x[1], reverse=True)
+    index = 0
+    for key, value in response_data.items():
+        response_data[key] = {'igd_list': R_list_out[index][0], 'search_time': R_list_out[index][1]}
+        index += 1
+    if len(response_data) > 0:
+        status_code = 200
+
+    resp = make_response(jsonify(response_data))
+    resp.status_code = status_code
+    return resp
+
 
 def Calorie_counting(igd_g_list):
     igd_g_list = igd_g_list.split(';')
@@ -96,8 +117,6 @@ def process_change_Recipe(request):
         R_dic['message'] = f"this user did not upload id  {R_info['R_id']} Recipe !!"
         status_code = 400
 
-
-
     resp = make_response(jsonify(R_dic))
     resp.status_code = status_code
 
@@ -105,7 +124,6 @@ def process_change_Recipe(request):
 
 
 def process_image_upload(request):
-
     data = request.files['file']
 
     try:
@@ -116,10 +134,9 @@ def process_image_upload(request):
         db.session.commit()
         response_data = {'image_id': image.id}
 
-        f = open(f"{IMAGE_PATH}{image.id}.png",'wb')
+        f = open(f"{IMAGE_PATH}{image.id}.png", 'wb')
         f.write(image_data)
         f.close()
-
 
         code = 200
     except:
@@ -165,8 +182,6 @@ def process_UploadRecipe(request):
     igd_list_search = Ingredient_content.split(',')
     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_list_search)).all()
 
-
-
     Rec = Recipe.query.filter_by(R_name=R_info['R_name']).first()
     if igd_list == []:
         R_dic['message'] = f"Ingredient not exist!!"
@@ -189,14 +204,12 @@ def process_UploadRecipe(request):
 
         db.session.add(Rec)
         db.session.commit()
-        R_dic['R_calorie']=R_calorie
+        R_dic['R_calorie'] = R_calorie
 
         R_dic['message'] = f"{R_info['R_name']} upload successfully!!"
     else:
         R_dic['message'] = f"{R_info['R_name']} already exist!!"
         status_code = 400
-
-
 
     resp = make_response(jsonify(R_dic))
     resp.status_code = status_code

@@ -153,25 +153,47 @@ def process_igd_search_recipe(request):
     code = 400
     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_name_list)).all()
 
-    R_id_dict = defaultdict(int)
+    R_id_dict = defaultdict(float)
     for igd in igd_list:
         R_list = igd.Recipe
         for R in R_list:
             R_id_dict[R] += 1
-    for key,value in R_id_dict:
+
+    for key,value in R_id_dict.items():
         R_id_dict[key] = value/len(key.Ingredient)
-    print(R_id_dict)
+
     response_sorted = sorted(R_id_dict.items(), key=lambda x: x[1], reverse=True)
-    if response_sorted[0][1]<1:
-        check = Search.query.filter(Search.search == igd_name_list).first()
+    if len(R_id_dict)==0:
+        check = Search.query.filter(Search.search == igd_info['igd_name'].lower()).first()
         if check:
             check.time +=1
             db.session.add(check)
             db.session.commit()
         else:
-            new_Search = Search(search = igd_name_list,time = 1)
+            new_Search = Search(search = igd_info['igd_name'].lower(),time = 1)
             db.session.add(new_Search)
             db.session.commit()
+    else:
+
+        satisfy = False
+        for  key,value in R_id_dict.items():
+            if value ==1:
+                satisfy=True
+
+                break
+        if not satisfy:
+            check = Search.query.filter(Search.search == igd_info['igd_name'].lower()).first()
+
+            if check:
+
+                check.time +=1
+                db.session.add(check)
+                db.session.commit()
+            else:
+
+                new_Search = Search(search = igd_info['igd_name'].lower(),time = 1)
+                db.session.add(new_Search)
+                db.session.commit()
 
     response_sorted = [x for x, y in response_sorted]
 
