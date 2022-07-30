@@ -184,7 +184,9 @@ def process_igd_search_recipe(request):
     igd_name_list = igd_info['igd_name'].lower().split(',')
     code = 400
     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_name_list)).all()
-
+    igd_name_list_save = [x.igd_name for x in igd_list]
+    # print(igd_name_list_save)
+    R_id_dict1= defaultdict(float)
     R_id_dict = defaultdict(float)
     for igd in igd_list:
         R_list = igd.Recipe
@@ -192,11 +194,11 @@ def process_igd_search_recipe(request):
             R_id_dict[R] += 1
 
     for key,value in R_id_dict.items():
-        R_id_dict[key] = value/len(key.Ingredient)
+        R_id_dict1[key] = value/len(key.Ingredient)
 
-    response_sorted = sorted(R_id_dict.items(), key=lambda x: x[1], reverse=True)
+    response_sorted = sorted(R_id_dict1.items(), key=lambda x: x[1], reverse=True)
 
-    igdList = sorted(igd_name_list)
+    igdList = sorted(igd_name_list_save)
     igdList = ','.join(igdList)
     if len(R_id_dict)==0:
         check = Search.query.filter(Search.search == igdList).first()
@@ -212,9 +214,10 @@ def process_igd_search_recipe(request):
 
         satisfy = False
         for  key,value in R_id_dict.items():
-            if value ==1:
+            # print(value,key.Ingredient)
+            if value ==len(igd_name_list):
                 satisfy=True
-                print(key,value)
+                print(len(igd_name_list),value)
 
                 break
         if not satisfy:

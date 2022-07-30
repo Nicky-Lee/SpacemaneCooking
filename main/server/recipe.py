@@ -27,7 +27,7 @@ from collections import defaultdict
 #     resp.status_code = 200
 #     return
 def process_lack_igd_list_recommend(request):
-    response_data = {"igd_list1": [], "igd_list2": [], "igd_list3": [], "igd_list4": [], }
+    response_data = {"igd_list1": None, "igd_list2": None, "igd_list3": None, "igd_list4": None, }
     status_code = 400
 
     igd_list = Search.query.filter(Search.search != '').limit(10)
@@ -37,8 +37,11 @@ def process_lack_igd_list_recommend(request):
     R_list_out = sorted(igd_list_dict.items(), key=lambda x: x[1], reverse=True)
     index = 0
     for key, value in response_data.items():
-        response_data[key] = {'igd_list': R_list_out[index][0], 'search_time': R_list_out[index][1]}
-        index += 1
+        try:
+            response_data[key] = {'igd_list': R_list_out[index][0], 'search_time': R_list_out[index][1]}
+            index += 1
+        except:
+            pass
     if len(response_data) > 0:
         status_code = 200
 
