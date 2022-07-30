@@ -36,7 +36,7 @@ class Recipe(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     R_name = db.Column(db.String(80), nullable=True)
-    R_description = db.Column(db.String(240), nullable=True)
+    R_description = db.Column(db.String(320), nullable=True)
     R_category = db.Column(db.String(20), nullable=True)
     R_calorie = db.Column(db.Integer, nullable=True)
     image_url = db.Column(db.String)
@@ -110,13 +110,14 @@ class Image(db.Model):
     def __init__(self, image):
         self.image = image
 
-class igd_opposite(db.Model):
+class IGD_opposite(db.Model):
     ___tablename__ = 'igd_opposite'
     id = db.Column(db.Integer, primary_key=True)
     igd_igd = db.Column(db.String(100), nullable=False)
     reason = db.Column(db.String(100), nullable=False)
 
 
-    # student_id=db.Column(db.Integer,db.ForeignKey('student.id'))
-    def __init__(self, image):
-        self.image = image
+
+    def __init__(self, igd_igd,reason):
+        self.igd_igd = igd_igd
+        self.reason=reason

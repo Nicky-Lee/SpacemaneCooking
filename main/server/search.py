@@ -1,5 +1,5 @@
 from ..model.user import User, UserInf,Search
-from ..model.Recipe import Recipe, Ingredient, IGD_category
+from ..model.Recipe import Recipe, Ingredient, IGD_category,IGD_opposite
 from flask import make_response, jsonify
 from .. import *
 from sqlalchemy import and_, or_
@@ -7,6 +7,27 @@ import json
 from ..util.token import TOKEN
 from collections import defaultdict
 from ..model.Recipe import Recipe
+
+
+def opposit(igd_list):
+    igd_listtmp = igd_list.split(',')
+    message = []
+    check_list = []
+    for index,a in enumerate(igd_listtmp[:-1]):
+        for b in igd_listtmp[index+1:]:
+            tmp = ','.join(sorted([a,b]))
+            if tmp not in check_list:
+                check_list.append(tmp)
+    opposit_list =  IGD_opposite.query.fillter(IGD_opposite.igd_igd.in_(check_list)).all()
+    if opposit_list:
+        for i in opposit_list:
+            message.append([i.igd_igd,i.reason])
+    else:
+        pass
+
+
+    return message
+
 
 def process_click_igd_fuzzy(request):
     igd_name_list = json.loads(request.data)['igd_name_list'].lower().split(',')
@@ -70,7 +91,7 @@ def process_select_recipe(request):
         db.session.commit()
         code = 200
     code = 200
-    print(R)
+    # print(R)
     return R,code
 
 
@@ -145,6 +166,8 @@ def process_Search_recipe(request):
                     break
     response_sorted = sorted(R_id_dict.items(), key=lambda x: x[1], reverse=True)
     response_sorted = [x for x, y in response_sorted]
+
+
 
     if R_id_dict:
         code = 200
