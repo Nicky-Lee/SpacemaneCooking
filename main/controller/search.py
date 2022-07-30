@@ -7,6 +7,13 @@ from ..util.decorator import token_optional, token_required
 
 search_ns = SearchDto.search_ns
 
+@search_ns.route("/opposit_check")
+class opposit_check(Resource):
+    # @search_ns.expect(SearchDto.search_recipe_model)
+    def post(self):
+        return process_opposit_check(request)
+
+
 
 @search_ns.route("/healthy_recipe")
 class healthy_recipe(Resource):

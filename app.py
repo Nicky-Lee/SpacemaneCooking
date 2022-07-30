@@ -62,6 +62,7 @@ if __name__ == '__main__':
                              IGD_category("eggs"), IGD_category("fruits"), IGD_category("dairy products"),
                              IGD_category("cereal"), IGD_category("condiments"), IGD_category("other types")]
         db.session.add_all(IGD_category_list)
+        db.session.commit()
         IGB_list = []
         igb_df = pd.read_excel('database_igd.xlsx')
         """
@@ -83,7 +84,7 @@ if __name__ == '__main__':
                              igd_calorie=igd_calorie)
             db.session.add(tmp)
             db.session.commit()
-
+            # print(igd_category,igd_name)
             igd_ca = IGD_category.query.filter(IGD_category.igd_category_name == igd_category).first()
             igd_ca.Ingredient.append(tmp)
             db.session.add(igd_ca)
@@ -130,7 +131,7 @@ if __name__ == '__main__':
 
 
             R_calorie, Ingredient_content = Calorie_counting(Ingredient_g_content)
-            # print(igd_list)
+
             igd_list_search = Ingredient_content.split(',')
             igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_list_search)).all()
 
@@ -152,7 +153,25 @@ if __name__ == '__main__':
 
             db.session.add(Rec)
             db.session.commit()
+        igd_oppoist_list = pd.read_excel(r'database_opposit.xlsx')
+        for index in igd_oppoist_list.index:
+            igd_igd = igd_oppoist_list.iloc[index, 0].lower()
+            igd_igd1 = sorted(igd_igd.split(';'))
+            igd_igd2 =','.join(igd_igd1)
+            reason = igd_oppoist_list.iloc[index, 1]
+
+
+            igd_op = IGD_opposite.query.filter(IGD_opposite.igd_igd == igd_igd2).all()
+
+            if igd_op:
+                continue
+
+            igd_op_tmp  = IGD_opposite(igd_igd=igd_igd2,
+                         reason=reason)
+            db.session.add(igd_op_tmp)
+            db.session.commit()
     else:
         pass
+
 
     app.run()

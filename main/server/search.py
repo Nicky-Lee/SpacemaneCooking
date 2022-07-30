@@ -9,24 +9,28 @@ from collections import defaultdict
 from ..model.Recipe import Recipe
 
 
-def opposit(igd_list):
-    igd_listtmp = igd_list.split(',')
-    message = []
+def process_opposit_check(request):
+    igd_listtmp = json.loads(request.data)['igd_list'].lower().split(',')
     check_list = []
+    res_dict = { }
     for index,a in enumerate(igd_listtmp[:-1]):
         for b in igd_listtmp[index+1:]:
             tmp = ','.join(sorted([a,b]))
             if tmp not in check_list:
                 check_list.append(tmp)
-    opposit_list =  IGD_opposite.query.fillter(IGD_opposite.igd_igd.in_(check_list)).all()
+    # print(check_list)
+    opposit_list =  IGD_opposite.query.filter(IGD_opposite.igd_igd.in_(check_list)).all()
+    index = 1
+
     if opposit_list:
         for i in opposit_list:
-            message.append([i.igd_igd,i.reason])
-    else:
-        pass
+            res_dict[f'opposit_group{index}'] = {'igd_opposit':i.igd_igd,'reason':i.reason}
+            index+=1
 
-
-    return message
+    code = 200
+    resp = make_response(jsonify(res_dict))
+    resp.status_code = code
+    return resp
 
 
 def process_click_igd_fuzzy(request):
@@ -210,6 +214,7 @@ def process_igd_search_recipe(request):
         for  key,value in R_id_dict.items():
             if value ==1:
                 satisfy=True
+                print(key,value)
 
                 break
         if not satisfy:
