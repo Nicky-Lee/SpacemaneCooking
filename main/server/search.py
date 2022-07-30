@@ -42,7 +42,7 @@ def process_click_igd_fuzzy(request):
     dict['igd_recommend_lsit']=igd_list
     if R_list and igd_list:
         code = 200
-
+    code = 200
     resp = make_response(jsonify(dict))
     resp.status_code = code
     return resp
@@ -56,11 +56,12 @@ def process_user_recipe(request):
     code =400
     if R:
         code=200
+    code = 200
     return R,code
 
 
 def process_select_recipe(request):
-    R_name = json.loads(request.data)['R_name'].lower()
+    R_name = json.loads(request.data)['R_name']
     R = Recipe.query.filter(Recipe.R_name == R_name).first()
     code =400
     if R:
@@ -68,7 +69,8 @@ def process_select_recipe(request):
         db.session.add(R)
         db.session.commit()
         code = 200
-
+    code = 200
+    print(R)
     return R,code
 
 
@@ -92,7 +94,7 @@ def process_search_fuzzy_igd_Recipe(request):
         # for i in R:
         # R_list.append(R.R_name)
         dict['Recipe'] = R.R_name
-
+    code = 200
     resp = make_response(jsonify(dict))
     resp.status_code = code
 
@@ -110,6 +112,7 @@ def process_R_category_search_recipe(request):
 
     if R_list:
         code = 200
+    code = 200
     return R_list,code
 
 def process_search_igd_list(request):
@@ -120,6 +123,7 @@ def process_search_igd_list(request):
     code = 400
     if igd_list:
         code = 200
+    code = 200
     return igd_list,code
 
 
@@ -144,6 +148,7 @@ def process_Search_recipe(request):
 
     if R_id_dict:
         code = 200
+    code = 200
     return response_sorted,code
 
 
@@ -202,6 +207,7 @@ def process_igd_search_recipe(request):
 
     if R_id_dict:
         code = 200
+    code = 200
 
     return response_sorted,code
 
@@ -217,6 +223,7 @@ def process_initial_recommend():
 
     if R_list:
         code = 200
+    code = 200
     return response_sorted,code
 
 
@@ -232,6 +239,7 @@ def process_search_category_igd(request):
     if igd_list:
         igd_list= igd_list.Ingredient
         code = 200
+    code = 200
 
     return igd_list,code
 
@@ -241,6 +249,7 @@ def process_get_all_igd_category(request):
     code = 400
     if all_igd_category:
         code = 200
+    code = 200
     return all_igd_category,code
 
 
@@ -274,4 +283,5 @@ def process_healthy_recipe(request):
 
     if R_list:
         code = 200
+    code = 200
     return response_sorted,code

@@ -109,3 +109,14 @@ class Image(db.Model):
     # student_id=db.Column(db.Integer,db.ForeignKey('student.id'))
     def __init__(self, image):
         self.image = image
+
+class igd_opposite(db.Model):
+    ___tablename__ = 'igd_opposite'
+    id = db.Column(db.Integer, primary_key=True)
+    igd_igd = db.Column(db.String(100), nullable=False)
+    reason = db.Column(db.String(100), nullable=False)
+
+
+    # student_id=db.Column(db.Integer,db.ForeignKey('student.id'))
+    def __init__(self, image):
+        self.image = image
