@@ -163,14 +163,17 @@ def process_igd_search_recipe(request):
         R_id_dict[key] = value/len(key.Ingredient)
 
     response_sorted = sorted(R_id_dict.items(), key=lambda x: x[1], reverse=True)
+
+    igdList = sorted(igd_name_list)
+    igdList = ','.join(igdList)
     if len(R_id_dict)==0:
-        check = Search.query.filter(Search.search == igd_info['igd_name'].lower()).first()
+        check = Search.query.filter(Search.search == igdList).first()
         if check:
             check.time +=1
             db.session.add(check)
             db.session.commit()
         else:
-            new_Search = Search(search = igd_info['igd_name'].lower(),time = 1)
+            new_Search = Search(search = igdList,time = 1)
             db.session.add(new_Search)
             db.session.commit()
     else:
@@ -182,7 +185,7 @@ def process_igd_search_recipe(request):
 
                 break
         if not satisfy:
-            check = Search.query.filter(Search.search == igd_info['igd_name'].lower()).first()
+            check = Search.query.filter(Search.search == igdList).first()
 
             if check:
 
@@ -191,7 +194,7 @@ def process_igd_search_recipe(request):
                 db.session.commit()
             else:
 
-                new_Search = Search(search = igd_info['igd_name'].lower(),time = 1)
+                new_Search = Search(search = igdList,time = 1)
                 db.session.add(new_Search)
                 db.session.commit()
 
