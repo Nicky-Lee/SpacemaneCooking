@@ -142,7 +142,7 @@ def process_forgetpassword_v1(request):
     user = User.query.filter_by(username=user_info["username"]).first()
 
     if user is None:
-        response_data['message'] = f'failed, username or username error!'
+        response_data['message'] = f'failed, username or email error!'
         status_code = 400
 
     elif user.email == user_info['email']:
@@ -155,7 +155,7 @@ def process_forgetpassword_v1(request):
 
 
     else:
-        response_data['message'] = 'failed, username or username error!'
+        response_data['message'] = 'failed, username or email error!'
         status_code = 400
     resp = make_response(jsonify(response_data))
     resp.status_code = status_code
@@ -184,6 +184,7 @@ def process_changpassword_v1(request):
     elif user.password == user_info['old_password']:
         if password_invalid(user_info['new_password']):
             response_data['message'] = f'failed, new password is Invalid '
+            status_code=400
         else:
             user.password = user_info['new_password']
             db.session.add(user)
@@ -191,6 +192,7 @@ def process_changpassword_v1(request):
             response_data['message'] = f'success'
             response_data['new_password'] = user_info['new_password']
             status_code = 200
+
 
     else:
         response_data['message'] = 'failed, password error'

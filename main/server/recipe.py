@@ -75,6 +75,8 @@ def Calorie_counting(igd_g_list):
         if igd:
             Ingredient_conten += igd.igd_name + ','
             c_res += igd.igd_calorie * int(num) * 0.01
+    if Ingredient_conten[-1]:
+        Ingredient_conten = Ingredient_conten[:-1]
 
     return int(c_res), Ingredient_conten
 

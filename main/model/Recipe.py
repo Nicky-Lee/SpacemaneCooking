@@ -84,7 +84,7 @@ class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     igd_name = db.Column(db.String(80), unique=True, nullable=False)
     igd_category = db.Column(db.String(120), nullable=True)
-    igd_opponent = db.Column(db.String(80))
+    # igd_opponent = db.Column(db.String(80))
     igd_calorie = db.Column(db.Integer, nullable=True)
     # image_id = db.Column(db.Integer)
     Recipe = db.relationship('Recipe', secondary=recipe_ingredient,backref=db.backref('ingredient') ,passive_deletes=True)
@@ -94,7 +94,7 @@ class Ingredient(db.Model):
                  image_id=None):
         self.igd_name = igd_name
         self.igd_category = igd_category
-        self.igd_opponent = igd_opponent
+        # self.igd_opponent = igd_opponent
         self.igb_description = igb_description
         self.igd_calorie = igd_calorie
         # self.image_id = image_id

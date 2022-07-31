@@ -57,6 +57,7 @@ if __name__ == '__main__':
     if mark == 'init':
         db.drop_all()
         db.create_all()
+        print('create IGD_category')
         IGD_category_list = [IGD_category('vegetables'), IGD_category("meat"), IGD_category("mushrooms"),
                              IGD_category("beans and bean products"), IGD_category("aquatic products"),
                              IGD_category("eggs"), IGD_category("fruits"), IGD_category("dairy products"),
@@ -80,7 +81,7 @@ if __name__ == '__main__':
             igd_opponent = igb_df.iloc[index, 3]
             tmp = Ingredient(igd_name=igd_name,
                              igd_category=igd_category,
-                             igd_opponent=igd_opponent,
+                             # igd_opponent=igd_opponent,
                              igd_calorie=igd_calorie)
             db.session.add(tmp)
             db.session.commit()
@@ -89,6 +90,7 @@ if __name__ == '__main__':
             igd_ca.Ingredient.append(tmp)
             db.session.add(igd_ca)
             db.session.commit()
+        print('upload Recipe')
 
         R_list = pd.read_excel(r'database_recipe.xlsx')
         """
@@ -154,6 +156,8 @@ if __name__ == '__main__':
             db.session.add(Rec)
             db.session.commit()
         igd_oppoist_list = pd.read_excel(r'database_opposit.xlsx')
+        print('upload igd_oppoist ')
+
         for index in igd_oppoist_list.index:
             igd_igd = igd_oppoist_list.iloc[index, 0].lower()
             igd_igd1 = sorted(igd_igd.split(';'))
@@ -169,6 +173,25 @@ if __name__ == '__main__':
             igd_op_tmp  = IGD_opposite(igd_igd=igd_igd2,
                          reason=reason)
             db.session.add(igd_op_tmp)
+            db.session.commit()
+
+        user = [("Nikcy",'z5229785',"871511711@qq.com"),
+                ("Nikcya",'z5229785',"871511711a@qq.com"),
+                ("Nikcyb",'z5229785',"871511711b@qq.com"),
+                ("Nikcyaa",'z5229785',"871511711aa@qq.com"),
+                ("Nikcybb",'z5229785',"871511711bb@qq.com")]
+        for username,key,email in user:
+            new_user = User(username=username, password=key, email=email)
+            db.session.add(new_user)
+            db.session.commit()
+
+        Search_lack = [("garlic,tofu", 5),
+                ("garlic,salt,tofu", 3),
+                ("garlic,salt", 2),
+                ("pepper,salt", 3) ]
+        for searc, time  in Search_lack:
+            new_Search = Search(search=searc, time=time)
+            db.session.add(new_Search)
             db.session.commit()
     else:
         pass

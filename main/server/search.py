@@ -12,7 +12,7 @@ from ..model.Recipe import Recipe
 def process_opposit_check(request):
     igd_listtmp = json.loads(request.data)['igd_list'].lower().split(',')
     check_list = []
-    res_dict = { }
+    res_dict = []
     for index,a in enumerate(igd_listtmp[:-1]):
         for b in igd_listtmp[index+1:]:
             tmp = ','.join(sorted([a,b]))
@@ -20,12 +20,12 @@ def process_opposit_check(request):
                 check_list.append(tmp)
     # print(check_list)
     opposit_list =  IGD_opposite.query.filter(IGD_opposite.igd_igd.in_(check_list)).all()
-    index = 1
+
 
     if opposit_list:
         for i in opposit_list:
-            res_dict[f'opposit_group{index}'] = {'igd_opposit':i.igd_igd,'reason':i.reason}
-            index+=1
+            res_dict.append({'igd_opposit':i.igd_igd,'reason':i.reason})
+
 
     code = 200
     resp = make_response(jsonify(res_dict))
@@ -52,6 +52,7 @@ def process_click_igd_fuzzy(request):
 
     igd_id_dict= defaultdict(int)
     for R in R_list:
+        R_dict = {}
         R_dict['R_name'] = R.R_name
         tmp_igd_list = R.Ingredient
         R_dict['idg_content'] =[]
@@ -61,8 +62,10 @@ def process_click_igd_fuzzy(request):
                 igd_id_dict[igd.igd_name] +=1
         if len(dict['Recipe_recommend_list'])<=5:
             dict['Recipe_recommend_list'].append(R_dict)
+        print(dict['Recipe_recommend_list'])
     igd_list = sorted(igd_id_dict.items(), key=lambda x: x[1], reverse=True)
     igd_list = [x for x, y in igd_list][:5]
+    print(dict['Recipe_recommend_list'])
 
     dict['igd_recommend_lsit']=igd_list
     if R_list and igd_list:
