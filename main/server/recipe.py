@@ -26,6 +26,21 @@ from collections import defaultdict
 #     resp = make_response(jsonify(response_data))
 #     resp.status_code = 200
 #     return
+
+def process_all_igd():
+    code = 400
+    igd_list = Ingredient.query.filter(Ingredient.igd_name != '').all()
+    response=[]
+    for igd in igd_list:
+
+        response.append(igd.igd_name)
+
+    code = 200
+    resp = make_response(jsonify(response))
+    resp.status_code = code
+    return resp
+
+
 def process_lack_igd_list_recommend(request):
     response_data = {"igd_list1": None, "igd_list2": None, "igd_list3": None, "igd_list4": None, }
     status_code = 400
@@ -85,7 +100,7 @@ def process_change_Recipe(request):
 
     Rec = Recipe.query.filter_by(id=R_info['R_id']).first()
     if igd_list == []:
-        status_code = 400
+        status_code = 200
         R_dic['message'] = f"Ingredient not exist!!"
     elif Rec:
         if Rec.user_id == user.id:
@@ -118,7 +133,7 @@ def process_change_Recipe(request):
             status_code = 400
     else:
         R_dic['message'] = f"this user did not upload id  {R_info['R_id']} Recipe !!"
-        status_code = 400
+        status_code = 200
 
     resp = make_response(jsonify(R_dic))
     resp.status_code = status_code
@@ -188,7 +203,7 @@ def process_UploadRecipe(request):
     Rec = Recipe.query.filter_by(R_name=R_info['R_name']).first()
     if igd_list == []:
         R_dic['message'] = f"Ingredient not exist!!"
-        status_code = 400
+        status_code = 200
     elif Rec is None and igd_list != []:
 
         Rec = Recipe(R_name=R_dic['R_name'],
@@ -212,7 +227,7 @@ def process_UploadRecipe(request):
         R_dic['message'] = f"{R_info['R_name']} upload successfully!!"
     else:
         R_dic['message'] = f"{R_info['R_name']} already exist!!"
-        status_code = 400
+        status_code = 200
 
     resp = make_response(jsonify(R_dic))
     resp.status_code = status_code

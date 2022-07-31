@@ -158,6 +158,7 @@ class SearchDto():
                                                   "R_category": fields.String,
                                                   "R_calorie": fields.String,
                                                   "image_url": fields.String,
+                                                  "id": fields.Integer,
                                                   "user_id": fields.Integer,
                                                   "Ingredient_g_content": fields.String,
                                                   "click":fields.Integer
@@ -190,6 +191,13 @@ class SearchDto():
 
     search_recipe_list_model_response = search_ns.model("search_recipe_list_model_response",
                                                         RecipeDto.search_list_Recipe_model)
+
+    search_recipe_list_model_message_response= search_ns.model("search_recipe_list_model_message_response",
+                                                               {
+                                                                   "R_list": fields.List(fields.Nested(RecipeDto.search_list_Recipe_model)),
+                                                                   "message":fields.String
+                                                               }
+                                                        )
 
     # search_recipe_list_model_response = search_ns.model("search_recipe_list_model_response",
     #                                                     {

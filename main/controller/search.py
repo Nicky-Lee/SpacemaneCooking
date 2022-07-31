@@ -163,20 +163,64 @@ class get_all_R_tag(Resource):
     #     return 'error request'
 
 
+# @search_ns.route("/igd_search_recipe")
+# class igd_search_recipe(Resource):
+#     @search_ns.expect(SearchDto.igd_search_recipe_model)
+#     @search_ns.response(0, "success", SearchDto.search_recipe_list_model_response)
+#     def post(self):
+#         # try:
+#         # process_search_igd(request)
+#         tmp ,code=  process_igd_search_recipe(request)
+#
+#         if code == 200:
+#             return marshal(tmp, SearchDto.search_recipe_list_model_response), 200
+#
+#         else:
+#             return tmp, 400
+
+
+
+# @search_ns.route("/igd_search_recipe")
+# class igd_search_recipe(Resource):
+#     @search_ns.expect(SearchDto.igd_search_recipe_model)
+#     @search_ns.response(0, "success", SearchDto.search_recipe_list_model_message_response)
+#     def post(self):
+#         # try:
+#         # process_search_igd(request)
+#         tmp ,code=  process_igd_search_recipe(request)
+#
+#         if code == 200:
+#             return marshal(tmp, SearchDto.search_recipe_list_model_message_response), 200
+#
+#         else:
+#             return tmp, 400
+
+# @search_ns.route("/igd_search_recipe")
+# class igd_search_recipe(Resource):
+#     @search_ns.expect(SearchDto.igd_search_recipe_model)
+#     def post(self):
+#         # try:
+#         # process_search_igd(request)
+#         return  process_igd_search_recipe(request)
+
 @search_ns.route("/igd_search_recipe")
 class igd_search_recipe(Resource):
     @search_ns.expect(SearchDto.igd_search_recipe_model)
-    @search_ns.response(0, "success", SearchDto.search_recipe_list_model_response)
+    @search_ns.response(0, "success", SearchDto.search_recipe_list_model_message_response)
     def post(self):
         # try:
         # process_search_igd(request)
         tmp ,code=  process_igd_search_recipe(request)
 
         if code == 200:
-            return marshal(tmp, SearchDto.search_recipe_list_model_response), 200
+            return marshal(tmp, SearchDto.search_recipe_list_model_message_response), 200
 
         else:
             return tmp, 400
+
+
+
+
 @search_ns.route("/R_category_search_recipe")
 class igd_search_recipe(Resource):
     @search_ns.expect(SearchDto.R_category_search_recipe_model)

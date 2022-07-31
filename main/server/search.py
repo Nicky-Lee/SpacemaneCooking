@@ -179,10 +179,74 @@ def process_Search_recipe(request):
     return response_sorted,code
 
 
+# def process_igd_search_recipe(request):
+#     igd_info = json.loads(request.data)
+#     igd_name_list = igd_info['igd_name'].lower().split(',')
+#     code = 400
+#     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_name_list)).all()
+#     igd_name_list_save = [x.igd_name for x in igd_list]
+#     # print(igd_name_list_save)
+#     R_id_dict1= defaultdict(float)
+#     R_id_dict = defaultdict(float)
+#     for igd in igd_list:
+#         R_list = igd.Recipe
+#         for R in R_list:
+#             R_id_dict[R] += 1
+#
+#     for key,value in R_id_dict.items():
+#         R_id_dict1[key] = value/len(key.Ingredient)
+#
+#     response_sorted = sorted(R_id_dict1.items(), key=lambda x: x[1], reverse=True)
+#
+#     igdList = sorted(igd_name_list_save)
+#     igdList = ','.join(igdList)
+#     if len(R_id_dict)==0:
+#         check = Search.query.filter(Search.search == igdList).first()
+#         if check:
+#             check.time +=1
+#             db.session.add(check)
+#             db.session.commit()
+#         else:
+#             new_Search = Search(search = igdList,time = 1)
+#             db.session.add(new_Search)
+#             db.session.commit()
+#     else:
+#
+#         satisfy = False
+#         for  key,value in R_id_dict.items():
+#             # print(value,key.Ingredient)
+#             if value ==len(igd_name_list):
+#                 satisfy=True
+#                 print(len(igd_name_list),value)
+#
+#                 break
+#         if not satisfy:
+#             check = Search.query.filter(Search.search == igdList).first()
+#
+#             if check:
+#
+#                 check.time +=1
+#                 db.session.add(check)
+#                 db.session.commit()
+#             else:
+#
+#                 new_Search = Search(search = igdList,time = 1)
+#                 db.session.add(new_Search)
+#                 db.session.commit()
+#
+#     response_sorted = [x for x, y in response_sorted]
+#
+#     if R_id_dict:
+#         code = 200
+#     code = 200
+#
+#     return response_sorted,code
+
 def process_igd_search_recipe(request):
     igd_info = json.loads(request.data)
     igd_name_list = igd_info['igd_name'].lower().split(',')
     code = 400
+    message = None
     igd_list = Ingredient.query.filter(Ingredient.igd_name.in_(igd_name_list)).all()
     igd_name_list_save = [x.igd_name for x in igd_list]
     # print(igd_name_list_save)
@@ -217,12 +281,12 @@ def process_igd_search_recipe(request):
             # print(value,key.Ingredient)
             if value ==len(igd_name_list):
                 satisfy=True
-                print(len(igd_name_list),value)
+                # print(len(igd_name_list),value)
 
                 break
         if not satisfy:
             check = Search.query.filter(Search.search == igdList).first()
-
+            message = "Sorry, there are no recipes that match exactly, the following recipes are recommended."
             if check:
 
                 check.time +=1
@@ -234,13 +298,20 @@ def process_igd_search_recipe(request):
                 db.session.add(new_Search)
                 db.session.commit()
 
+
     response_sorted = [x for x, y in response_sorted]
+
+
+    response = {'R_list':response_sorted,"message":message}
+
+    print(response)
 
     if R_id_dict:
         code = 200
     code = 200
 
-    return response_sorted,code
+    return response,code
+
 
 def process_initial_recommend():
     code = 400
