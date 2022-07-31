@@ -250,7 +250,7 @@ def process_initial_recommend():
         Recipe_click = R.click
         R_list_dict[R] += Recipe_click
     response_sorted = sorted(R_list_dict.items(), key=lambda x: x[1], reverse=True)
-    response_sorted = [x for x, y in response_sorted]
+    response_sorted = [x for x, y in response_sorted][:9]
 
     if R_list:
         code = 200
