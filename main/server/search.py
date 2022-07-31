@@ -288,7 +288,7 @@ def process_get_all_R_tag(request):
     all_R_tag_list = []
     all_R_tag = Recipe.query.filter(Recipe.R_category != '').all()
     for R in all_R_tag:
-        for each_tag in R.R_category.split(','):
+        for each_tag in R.R_category.split(';'):
             if each_tag != '' and each_tag not in all_R_tag_list:
 
                 all_R_tag_list.append(each_tag)
