@@ -179,7 +179,8 @@ if __name__ == '__main__':
                 ("Nikcya",'z5229785',"871511711a@qq.com"),
                 ("Nikcyb",'z5229785',"871511711b@qq.com"),
                 ("Nikcyaa",'z5229785',"871511711aa@qq.com"),
-                ("Nikcybb",'z5229785',"871511711bb@qq.com")]
+                ("Nikcybb",'z5229785',"871511711bb@qq.com"),
+                ("Nikcybbc",'z5229785',"871511711bbc@qq.com")]
         for username,key,email in user:
             new_user = User(username=username, password=key, email=email)
             db.session.add(new_user)
