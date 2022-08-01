@@ -134,7 +134,7 @@ def process_R_category_search_recipe(request):
     for index,item in enumerate(R_category):
         R_category[index] ="%"+R_category[index]+"%"
 
-    rule = or_(*[Recipe.R_category.like(w) for w in R_category])
+    rule = and_(*[Recipe.R_category.like(w) for w in R_category])
 
     R_list = Recipe.query.filter(rule).all()
 
@@ -384,7 +384,7 @@ def process_healthy_recipe(request):
         Recipe_cal = R.R_calorie
         R_list_dict[R] = Recipe_cal
     response_sorted = sorted(R_list_dict.items(), key=lambda x: x[1], reverse=False)
-    response_sorted = [x for x, y in response_sorted]
+    response_sorted = [x for x, y in response_sorted][:100]
 
     if R_list:
         code = 200
