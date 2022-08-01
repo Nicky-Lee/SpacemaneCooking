@@ -147,7 +147,7 @@ def process_forgetpassword_v1(request):
 
     elif user.email == user_info['email']:
         msg = Message(subject = 'SpaceManCooking forget password Mail',  recipients=[user_info['email']])
-        msg.body = f"""Hello, dear SpaceMam--{user_info["username"]}.
+        msg.body = f"""Hello, dear SpaceMan--{user_info["username"]}.
                                         Your password is {user.password}."""
         mail.send(msg)
 
